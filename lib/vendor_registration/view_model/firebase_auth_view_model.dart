@@ -17,10 +17,14 @@ class FirebaseAuthViewModel with ChangeNotifier {
   final googleSigin = GoogleSignIn();
   GoogleSignInAccount? _user;
   bool _isLoadingOtp = false;
+  String _verifyOTP = '';
   String otpValue = '';
+  int? _otpResendToken;
 
   bool get isLoadingOtp => _isLoadingOtp;
   GoogleSignInAccount get user => _user!;
+  String get verifyOTP => _verifyOTP;
+  int get otpResendToken => _otpResendToken!;
 
   Future firebaseGoogleAuth(context) async {
     final navigator = Navigator.of(context);
@@ -45,14 +49,10 @@ class FirebaseAuthViewModel with ChangeNotifier {
       log(e.code);
       SnackBarWidget.snackBar(context, "No internet connection");
     } on FirebaseAuthException catch (e) {
+      log("Google firebase error");
       FirebaseExpeptions.cases(e, context);
     }
     notifyListeners();
-  }
-
-  firebaseGoogleLogout() async {
-    await googleSigin.disconnect();
-    FirebaseAuth.instance.signOut();
   }
 
   setOtpLoading(bool loadingOtp) {
@@ -76,8 +76,8 @@ class FirebaseAuthViewModel with ChangeNotifier {
       },
       codeSent: (String verificationId, int? resendToken) {
         log("code sent");
-
-        OtpVerificationPage.verify = verificationId;
+        _otpResendToken = resendToken;
+        _verifyOTP = verificationId;
         Navigator.pushNamed(context, NavigatorClass.otpScreen);
         setOtpLoading(false);
       },
@@ -104,7 +104,7 @@ class FirebaseAuthViewModel with ChangeNotifier {
     setOtpLoading(true);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: OtpVerificationPage.verify,
+        verificationId: _verifyOTP,
         smsCode: otpValue,
       );
       await auth.signInWithCredential(credential);
@@ -116,14 +116,35 @@ class FirebaseAuthViewModel with ChangeNotifier {
     } on PlatformException {
       SnackBarWidget.snackBar(context, "No internet connection");
     } on FirebaseAuthException catch (error) {
+      log("No internet");
+
       FirebaseExpeptions.cases(error, context);
     }
     setOtpLoading(false);
   }
 
-  // ----------- user Login status
+  resentOTPtoPhone(BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String countryCode = "+91";
 
-  userLoginStatus(context) async {
+    await auth.verifyPhoneNumber(
+      phoneNumber:
+          countryCode + context.read<SignUpViewModel>().phoneController.text,
+      verificationCompleted: (phoneAuthCredential) {},
+      verificationFailed: (error) {},
+      codeSent: (verificationId, forceResendingToken) {
+        _verifyOTP = verificationId;
+        _otpResendToken = forceResendingToken;
+      },
+      codeAutoRetrievalTimeout: (verificationId) {},
+      forceResendingToken: _otpResendToken,
+      timeout: const Duration(seconds: 60),
+    );
+  }
+
+  // ----------- vendor Login status
+
+  vendorLoginStatus(context) async {
     final navigator = Navigator.of(context);
     final sharedPrefer = await SharedPreferences.getInstance();
     final googleSigup = sharedPrefer.getBool(GlobalKeys.vendorLoggedWithGoogle);
@@ -145,5 +166,10 @@ class FirebaseAuthViewModel with ChangeNotifier {
       navigator.pushNamedAndRemoveUntil(
           NavigatorClass.loginScreen, (route) => false);
     }
+  }
+
+  firebaseGoogleLogout() async {
+    await googleSigin.disconnect();
+    FirebaseAuth.instance.signOut();
   }
 }

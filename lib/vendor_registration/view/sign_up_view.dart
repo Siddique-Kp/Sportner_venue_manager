@@ -65,12 +65,12 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                         Text("Create Account",
                             style: MyTextStyles.loginHeadingStyle),
                         const Text(
-                          "Create new account",
+                          "Hey, Let's get rolling",
                           style: TextStyle(
                             color: MyColors.kGreyColor,
                           ),
                         ),
-                        MySize.kHeight50,
+                        MySize.kHeight40,
                         TextFormWidget(
                           isUser: true,
                           controller: userNameController,
@@ -98,6 +98,46 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                           labelText: 'Confirm Password',
                           textFieldIcon: Icons.lock_outline,
                           keyType: TextInputType.text,
+                        ),
+                        MySize.kHeight10,
+                        Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.black12,
+                          ),
+                          width: double.infinity,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "Add Gov. approve Document",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: MyColors.kButtonColor),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: MyColors.appMainGreenColor,
+                                  ),
+                                  width: 90,
+                                  height: 30,
+                                  child: const Center(
+                                      child: Text(
+                                    "Choose file",
+                                    style: TextStyle(
+                                      color: MyColors.kWhiteColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  )),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         MySize.kHeight40,
                         LoginButtonWidget(

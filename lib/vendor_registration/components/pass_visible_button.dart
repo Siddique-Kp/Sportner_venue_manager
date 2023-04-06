@@ -13,6 +13,7 @@ class PassVisibleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      
       onTap: onTap,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,

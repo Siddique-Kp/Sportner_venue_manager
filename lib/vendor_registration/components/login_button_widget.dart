@@ -22,7 +22,7 @@ class LoginButtonWidget extends StatelessWidget {
     final firebaseViewModel = context.watch<FirebaseAuthViewModel>();
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        disabledBackgroundColor: MyColors.kGreyColor,
+        disabledBackgroundColor: const Color.fromARGB(255, 195, 195, 195),
         elevation: 0,
         backgroundColor: MyColors.kButtonColor,
       ),

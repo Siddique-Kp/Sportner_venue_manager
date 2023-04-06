@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "664111109279",
+    "project_id": "sportner-venue-manager",
+    "storage_bucket": "sportner-venue-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664111109279:android:b9fd9e6207cd94b2dcfeaa",
+        "android_client_info": {
+          "package_name": "com.example.sportner_venue_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664111109279-pvuje8m8120fel4of2h0rbsmt96jhoe0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfsbIHJdxU0HMM6Fq6pHI2gWNPo-PXXM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664111109279-pvuje8m8120fel4of2h0rbsmt96jhoe0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

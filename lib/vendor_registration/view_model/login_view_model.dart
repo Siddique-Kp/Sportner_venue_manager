@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/snackbar.dart';
 import 'package:sportner_venue_manager/vendor_registration/model/login_error_model.dart';
-import 'package:sportner_venue_manager/vendor_registration/model/user_login_model.dart';
+import 'package:sportner_venue_manager/vendor_registration/model/vendor_login_model.dart';
 import 'package:sportner_venue_manager/vendor_registration/repo/api_status.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dart';
@@ -17,12 +17,12 @@ class LoginViewModel with ChangeNotifier {
 
   bool _isShowPassword = true;
   bool _isLoading = false;
-  UserLoginModel? _userData;
+  VendorLoginModel? _vendorData;
   LoginError? _loginError;
 
   bool get isShowPassword => _isShowPassword;
   bool get isLoading => _isLoading;
-  UserLoginModel get userData => _userData!;
+  VendorLoginModel get vendorData => _vendorData!;
   LoginError get loginError => _loginError!;
 
   setShowPassword() {
@@ -35,9 +35,9 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<UserLoginModel?> setUserData(UserLoginModel userData) async {
-    _userData = userData;
-    return _userData;
+  Future<VendorLoginModel?> setvendorData(VendorLoginModel vendorData) async {
+    _vendorData = vendorData;
+    return _vendorData;
   }
 
   setLoginError(LoginError loginError, context) async {
@@ -50,10 +50,10 @@ class LoginViewModel with ChangeNotifier {
     final navigator = Navigator.of(context);
     setLoading(true);
     final response = await ApiServices.postMethod(
-        Urls.kBASEURL + Urls.kVENDORSIGNIN, userDataBody(),userLoginModelFromJson);
+        Urls.kBASEURL + Urls.kVENDORSIGNIN, vendorDataBody(),vendorLoginModelFromJson);
 
     if (response is Success) {
-      final data = await setUserData(response.response as UserLoginModel);
+      final data = await setvendorData(response.response as VendorLoginModel);
       final accessToken = data!.accessToken;
       log(accessToken.toString());
       clearController();
@@ -90,8 +90,8 @@ class LoginViewModel with ChangeNotifier {
     await status.setString(GlobalKeys.accesToken, accessToken);
   }
 
-  Map<String, dynamic> userDataBody() {
-    final body = UserLoginModel(
+  Map<String, dynamic> vendorDataBody() {
+    final body = VendorLoginModel(
       mobile: loginPhoneCntrllr.text,
       password: loginPasswordCntrllr.text,
     );

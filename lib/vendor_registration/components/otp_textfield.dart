@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
@@ -10,6 +11,7 @@ class OtpTextfieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OtpTextField(
+      inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
       numberOfFields: 6,
       fieldWidth: 45,
       borderColor: MyColors.kButtonColor,

@@ -7,6 +7,7 @@ import 'package:sportner_venue_manager/utils/constants.dart';
 
 import '../../utils/keys.dart';
 import '../../utils/navigations.dart';
+import '../components/snackbar.dart';
 import '../model/user_signup_model.dart';
 import '../repo/api_status.dart';
 
@@ -59,11 +60,10 @@ class SignUpViewModel with ChangeNotifier {
     return _userData;
   }
 
-  setLoginError(SignUpError signUpError) async {
-    if (_signUpError == null) {
-      return;
-    }
+  setLoginError(SignUpError signUpError,context) async {
     _signUpError = signUpError;
+    return errorResonses(_signUpError!, context);
+
   }
 
   getSignUpStatus(BuildContext context) async {
@@ -89,7 +89,7 @@ class SignUpViewModel with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      await setLoginError(loginError);
+      await setLoginError(loginError,context);
       clearPassword();
     }
     setLoading(false);
@@ -113,5 +113,14 @@ class SignUpViewModel with ChangeNotifier {
       password: passController.text,
     );
     return body.toJson();
+  }
+
+  errorResonses(SignUpError signUperror, BuildContext context) {
+    final statusCode = signUperror.code;
+    if (statusCode == 409) {
+      return SnackBarWidget.snackBar(
+          context, "User with this mobile number already exists");
+    }
+    return SnackBarWidget.snackBar(context, signUperror.message.toString());
   }
 }

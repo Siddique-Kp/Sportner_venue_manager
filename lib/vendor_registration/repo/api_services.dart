@@ -11,6 +11,7 @@ class ApiServices {
     Map body,
     Function function,
   ) async {
+    log(body.toString());
     try {
       final response = await http.post(Uri.parse(url), body: body);
 
@@ -47,6 +48,7 @@ class ApiServices {
         errorResponse: "Time out try again",
       );
     } catch (e) {
+      log(e.runtimeType.toString());
       return Failure(
         code: InvalidRespons.kUNKNOWNERROR,
         errorResponse: "Unknown Error",
