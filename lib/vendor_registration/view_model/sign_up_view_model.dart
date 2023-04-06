@@ -1,5 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/vendor_registration/model/login_error_model.dart';
 import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dart';
@@ -22,12 +25,14 @@ class SignUpViewModel with ChangeNotifier {
   bool _isLoading = false;
   SignUpError? _signUpError;
   UserSignupModel? _userData;
+  File? _image;
 
   bool get isShowPassword => _isShowPassword;
   bool get isShowConfPassword => _isShowConfPassword;
   bool get isLoading => _isLoading;
   UserSignupModel get userData => _userData!;
   SignUpError get signUpError => _signUpError!;
+  File? get image => _image!;
 
   setshowPassword() {
     _isShowPassword = !_isShowPassword;
@@ -60,10 +65,9 @@ class SignUpViewModel with ChangeNotifier {
     return _userData;
   }
 
-  setLoginError(SignUpError signUpError,context) async {
+  setLoginError(SignUpError signUpError, context) async {
     _signUpError = signUpError;
     return errorResonses(_signUpError!, context);
-
   }
 
   getSignUpStatus(BuildContext context) async {
@@ -89,7 +93,7 @@ class SignUpViewModel with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      await setLoginError(loginError,context);
+      await setLoginError(loginError, context);
       clearPassword();
     }
     setLoading(false);
@@ -122,5 +126,20 @@ class SignUpViewModel with ChangeNotifier {
           context, "User with this mobile number already exists");
     }
     return SnackBarWidget.snackBar(context, signUperror.message.toString());
+  }
+
+  // ---- Pick image from gallery
+  Future imagePicker() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final pickedImage = File(image.path);
+      _image = pickedImage;
+      log(_image!.uri.toString());
+      notifyListeners();
+    } on PlatformException catch (e) {
+      log(e.code.toString());
+    }
   }
 }

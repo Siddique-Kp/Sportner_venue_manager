@@ -33,6 +33,7 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(
     //    const SystemUiOverlayStyle(statusBarColor: MyColors.appMainGreenColor));
+    final size = MediaQuery.of(context).size;
     final signUpProvider = context.watch<SignUpViewModel>();
     TextEditingController userNameController =
         signUpProvider.userNameController;
@@ -100,43 +101,58 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                           keyType: TextInputType.text,
                         ),
                         MySize.kHeight10,
-                        Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black12,
-                          ),
-                          width: double.infinity,
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Add Gov. approve Document",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: MyColors.kButtonColor),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: MyColors.appMainGreenColor,
-                                  ),
-                                  width: 90,
-                                  height: 30,
-                                  child: const Center(
-                                      child: Text(
-                                    "Choose file",
-                                    style: TextStyle(
-                                      color: MyColors.kWhiteColor,
-                                      fontWeight: FontWeight.w500,
+                        InkWell(
+                          onTap: () {
+                            context.read<SignUpViewModel>().imagePicker();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.black12,
+                            ),
+                            width: double.infinity,
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    width: size.width * 0.5,
+                                    child: Text(
+                                      signUpProvider.image == null
+                                          ? "Add Gov. approve Document"
+                                          : signUpProvider.image!.path
+                                              .split("/")
+                                              .last,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: MyColors.kButtonColor),
                                     ),
-                                  )),
+                                  ),
                                 ),
-                              )
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: MyColors.appMainGreenColor,
+                                    ),
+                                    width: 90,
+                                    height: 30,
+                                    child: const Center(
+                                        child: Text(
+                                      "Choose file",
+                                      style: TextStyle(
+                                        color: MyColors.kWhiteColor,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         MySize.kHeight40,
