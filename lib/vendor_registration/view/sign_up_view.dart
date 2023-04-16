@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
@@ -8,6 +7,7 @@ import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/navigations.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/sign_up_view_model.dart';
+import '../components/image_picking_widget.dart';
 import '../components/login_button_widget.dart';
 import '../components/registering_text_widget.dart';
 import '../components/text_form_field.dart';
@@ -62,16 +62,16 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        MySize.kHeight50,
+                        AppSizes.kHeight50,
                         Text("Create Account",
-                            style: MyTextStyles.loginHeadingStyle),
+                            style: AppTextStyles.loginHeading),
                         const Text(
                           "Hey, Let's get rolling",
                           style: TextStyle(
-                            color: MyColors.kGreyColor,
+                            color: AppColors.grey,
                           ),
                         ),
-                        MySize.kHeight40,
+                        AppSizes.kHeight40,
                         TextFormWidget(
                           isUser: true,
                           controller: userNameController,
@@ -100,62 +100,9 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                           textFieldIcon: Icons.lock_outline,
                           keyType: TextInputType.text,
                         ),
-                        MySize.kHeight10,
-                        InkWell(
-                          onTap: () {
-                            context.read<SignUpViewModel>().imagePicker();
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.black12,
-                            ),
-                            width: double.infinity,
-                            height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    width: size.width * 0.5,
-                                    child: Text(
-                                      signUpProvider.image == null
-                                          ? "Add Gov. approve Document"
-                                          : signUpProvider.image!.path
-                                              .split("/")
-                                              .last,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: MyColors.kButtonColor),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: MyColors.appMainGreenColor,
-                                    ),
-                                    width: 90,
-                                    height: 30,
-                                    child: const Center(
-                                        child: Text(
-                                      "Choose file",
-                                      style: TextStyle(
-                                        color: MyColors.kWhiteColor,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        MySize.kHeight40,
+                        AppSizes.kHeight10,
+                        const ImagePickingWidget(),
+                        AppSizes.kHeight40,
                         LoginButtonWidget(
                           title: "CREATE ACCOUNT",
                           onPressed: userNameController.text.isEmpty ||
@@ -171,7 +118,7 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                                   }
                                 },
                         ),
-                        MySize.kHeight30,
+                        AppSizes.kHeight30,
                         RegisteringText(
                           leftText: 'Already have an account? ',
                           rightText: "Login",

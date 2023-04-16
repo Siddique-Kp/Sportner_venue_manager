@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MySize{// Heights
+class AppSizes{// Heights
 
 static const kHeight20 = SizedBox(height: 20);
 static const kHeight30 = SizedBox(height: 30);
 static const kHeight40 = SizedBox(height: 40);
 static const kHeight50 = SizedBox(height: 50);
 static const kHeight10 = SizedBox(height: 10);
+static const kHeight5 = SizedBox(height: 10);
 
 // Widths
 

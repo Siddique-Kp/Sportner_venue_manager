@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../utils/global_colors.dart';
 import '../view_model/sign_up_view_model.dart';
 
@@ -18,8 +15,7 @@ class ImagePickingWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        log("hi");
-        context.read<SignUpViewModel>().imagePicker();
+        context.read<SignUpViewModel>().imagePicker(context);
       },
       child: Container(
         padding: const EdgeInsets.only(left: 10),
@@ -37,12 +33,12 @@ class ImagePickingWidget extends StatelessWidget {
                 width: size.width * 0.5,
                 child: Text(
                   signUpProvider.image == null
-                      ? "Add Gov. approve Document"
+                      ? "Add Gov. approved Document"
                       : signUpProvider.image!.path.split("/").last,
                   maxLines: 1,
                   style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: MyColors.kButtonColor),
+                      color: AppColors.kButtonColor),
                 ),
               ),
             ),
@@ -51,7 +47,7 @@ class ImagePickingWidget extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: MyColors.appMainGreenColor,
+                  color: AppColors.appColor,
                 ),
                 width: 90,
                 height: 30,
@@ -59,7 +55,7 @@ class ImagePickingWidget extends StatelessWidget {
                     child: Text(
                   "Choose file",
                   style: TextStyle(
-                    color: MyColors.kWhiteColor,
+                    color: AppColors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 )),

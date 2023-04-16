@@ -24,7 +24,7 @@ class LoginButtonWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         disabledBackgroundColor: const Color.fromARGB(255, 195, 195, 195),
         elevation: 0,
-        backgroundColor: MyColors.kButtonColor,
+        backgroundColor: AppColors.kButtonColor,
       ),
       onPressed: onPressed,
       child: SizedBox(
@@ -35,7 +35,7 @@ class LoginButtonWidget extends StatelessWidget {
                   firebaseViewModel.isLoadingOtp && !isLogin
               ? const CircularProgressIndicator(
                   strokeWidth: 3,
-                  color: MyColors.kWhiteColor,
+                  color: AppColors.white,
                 )
               : Text(
                   title,

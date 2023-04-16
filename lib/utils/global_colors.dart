@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 // colors
-class MyColors {
+class AppColors {
   static const scaffoldColor = Colors.white;
   static const kButtonColor = Color(0xFF00B562);
-  static const appMainGreenColor = Color.fromARGB(255, 0, 181, 98);
-  static const kWhiteColor = Colors.white;
-  static const kBlackColor = Colors.black;
-  static const klightBlackColor = Colors.black54;
-  static const kGreyColor = Colors.grey;
+  static const appColor = Color.fromARGB(255, 0, 181, 98);
+  static const white = Colors.white;
+  static const black = Colors.black;
+  static const lightBlackColor = Colors.black54;
+  static const grey = Colors.grey;
+  static const lightgrey = Color.fromARGB(45, 158, 158, 158);
 }
 
 class PrimaryColor {

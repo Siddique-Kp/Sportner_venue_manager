@@ -11,7 +11,7 @@ import 'package:sportner_venue_manager/utils/constants.dart';
 import '../../utils/keys.dart';
 import '../../utils/navigations.dart';
 import '../components/snackbar.dart';
-import '../model/user_signup_model.dart';
+import '../model/vendor_signup_model.dart';
 import '../repo/api_status.dart';
 
 class SignUpViewModel with ChangeNotifier {
@@ -24,15 +24,15 @@ class SignUpViewModel with ChangeNotifier {
   bool _isShowConfPassword = true;
   bool _isLoading = false;
   SignUpError? _signUpError;
-  UserSignupModel? _userData;
+  VendorSignupModel? _vendorData;
   File? _image;
 
   bool get isShowPassword => _isShowPassword;
   bool get isShowConfPassword => _isShowConfPassword;
   bool get isLoading => _isLoading;
-  UserSignupModel get userData => _userData!;
+  VendorSignupModel get vendorData => _vendorData!;
   SignUpError get signUpError => _signUpError!;
-  File? get image => _image!;
+  File? get image => _image;
 
   setshowPassword() {
     _isShowPassword = !_isShowPassword;
@@ -60,9 +60,9 @@ class SignUpViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<UserSignupModel?> setUserData(UserSignupModel userData) async {
-    _userData = userData;
-    return _userData;
+  Future<VendorSignupModel?> setvendorData(VendorSignupModel vendorData) async {
+    _vendorData = vendorData;
+    return _vendorData;
   }
 
   setLoginError(SignUpError signUpError, context) async {
@@ -75,17 +75,17 @@ class SignUpViewModel with ChangeNotifier {
     setLoading(true);
     final response = await ApiServices.postMethod(
       Urls.kBASEURL + Urls.kVENDORSIGNUP,
-      userDatabody(),
-      userSignupModelFromJson,
+      vendorDatabody(),
+      vendorSignupModelFromJson,
     );
     if (response is Success) {
       log("success");
-      final data = await setUserData(response.response as UserSignupModel);
+      final data = await setvendorData(response.response as VendorSignupModel);
       final accessToken = data!.accessToken;
       clearTextField();
       setSignupStatus(accessToken!);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.homeScreen, (route) => false);
+          NavigatorClass.mainScreen, (route) => false);
     }
     if (response is Failure) {
       log("Failed");
@@ -110,11 +110,12 @@ class SignUpViewModel with ChangeNotifier {
     confirfPassController.clear();
   }
 
-  Map<String, dynamic> userDatabody() {
-    final body = UserSignupModel(
+  Map<String, dynamic> vendorDatabody() {
+    final body = VendorSignupModel(
       name: userNameController.text,
       mobile: phoneController.text,
       password: passController.text,
+      image: _image!.uri.toString(),
     );
     return body.toJson();
   }
@@ -123,21 +124,23 @@ class SignUpViewModel with ChangeNotifier {
     final statusCode = signUperror.code;
     if (statusCode == 409) {
       return SnackBarWidget.snackBar(
-          context, "User with this mobile number already exists");
+          context, "vendor with this mobile number already exists");
     }
     return SnackBarWidget.snackBar(context, signUperror.message.toString());
   }
 
   // ---- Pick image from gallery
-  Future imagePicker() async {
+  Future imagePicker(context) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
+      if (image == null) {
+        return;
+      }
 
       final pickedImage = File(image.path);
       _image = pickedImage;
-      log(_image!.uri.toString());
       notifyListeners();
+      return _image;
     } on PlatformException catch (e) {
       log(e.code.toString());
     }

@@ -42,7 +42,7 @@ class FirebaseAuthViewModel with ChangeNotifier {
         idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
-      navigator.pushReplacementNamed(NavigatorClass.homeScreen);
+      navigator.pushReplacementNamed(NavigatorClass.mainScreen);
       final sharedPref = await SharedPreferences.getInstance();
       sharedPref.setBool(GlobalKeys.vendorLoggedWithGoogle, true);
     } on PlatformException catch (e) {
@@ -61,6 +61,10 @@ class FirebaseAuthViewModel with ChangeNotifier {
   }
 
   fireBasePhoneAuth(BuildContext context) async {
+    final signUpViewModel = context.read<SignUpViewModel>();
+    if (signUpViewModel.image == null) {
+      return SnackBarWidget.snackBar(context, "Please Choose Document");
+    }
     setOtpLoading(true);
     String countryCode = "+91";
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -111,12 +115,12 @@ class FirebaseAuthViewModel with ChangeNotifier {
       await signUpViewModel.getSignUpStatus(context);
       setOtpLoading(false);
     } on SocketException {
-      log("No internet");
+      log("No internet otp page");
       SnackBarWidget.snackBar(context, "No internet connection");
     } on PlatformException {
       SnackBarWidget.snackBar(context, "No internet connection");
     } on FirebaseAuthException catch (error) {
-      log("No internet");
+      log("Firebase error otp page");
 
       FirebaseExpeptions.cases(error, context);
     }

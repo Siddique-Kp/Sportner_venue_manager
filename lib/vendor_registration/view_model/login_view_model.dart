@@ -59,12 +59,11 @@ class LoginViewModel with ChangeNotifier {
       clearController();
       setLoginStatus(accessToken!);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.homeScreen, (route) => false);
+          NavigatorClass.mainScreen, (route) => false);
     }
 
     if (response is Failure) {
       await setLoading(false);
-
       clearPassword();
       LoginError loginError = LoginError(
         code: response.code,

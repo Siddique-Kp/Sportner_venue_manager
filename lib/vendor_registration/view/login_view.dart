@@ -50,15 +50,15 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    MySize.kHeight20,
-                    Text("Welcome Back", style: MyTextStyles.loginHeadingStyle),
+                    AppSizes.kHeight20,
+                    Text("Welcome Back", style: AppTextStyles.loginHeading),
                     const Text(
                       "Sign to continue",
                       style: TextStyle(
-                        color: MyColors.kGreyColor,
+                        color: AppColors.grey,
                       ),
                     ),
-                    MySize.kHeight10,
+                    AppSizes.kHeight10,
                     SizedBox(
                       height: size.height*0.2,
                       width: size.width*0.5,
@@ -69,7 +69,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                         color: Colors.green,
                       ),
                     ),
-                    MySize.kHeight10,
+                    AppSizes.kHeight10,
                     Consumer<LoginViewModel>(
                         builder: (context, userLoginViewModel, child) {
                       return TextFormWidget(
@@ -90,7 +90,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                         keyType: TextInputType.text,
                       );
                     }),
-                    MySize.kHeight10,
+                    AppSizes.kHeight10,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [
@@ -100,12 +100,12 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color: MyColors.kButtonColor,
+                            color: AppColors.kButtonColor,
                           ),
                         ),
                       ],
                     ),
-                    MySize.kHeight30,
+                    AppSizes.kHeight30,
                     LoginButtonWidget(
                       isLogin: true,
                       onPressed: () async {
@@ -117,7 +117,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                       },
                       title: "LOGIN",
                     ),
-                    MySize.kHeight20,
+                    AppSizes.kHeight20,
                     Row(
                       children: const [
                         Expanded(
@@ -132,7 +132,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                         ),
                       ],
                     ),
-                    MySize.kHeight10,
+                    AppSizes.kHeight10,
                     InkWell(
                       onTap: () async {
                         await firebaseAuthViewModel.firebaseGoogleAuth(context);
@@ -154,20 +154,20 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Image.asset("assets/google-logo.png"),
                             ),
-                            MySize.kWidth20,
+                            AppSizes.kWidth20,
                             const Text(
                               "Continue with google",
                               style: TextStyle(
-                                color: MyColors.kGreyColor,
+                                color: AppColors.grey,
                                 fontSize: 18,
                               ),
                             ),
-                            MySize.kWidth30,
+                            AppSizes.kWidth30,
                           ],
                         ),
                       ),
                     ),
-                    MySize.kHeight30,
+                    AppSizes.kHeight30,
                     RegisteringText(
                       onTap: () {
                         Navigator.pushNamed(

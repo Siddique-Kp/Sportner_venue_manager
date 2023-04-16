@@ -14,9 +14,9 @@ class OtpTextfieldWidget extends StatelessWidget {
       inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
       numberOfFields: 6,
       fieldWidth: 45,
-      borderColor: MyColors.kButtonColor,
-      focusedBorderColor: MyColors.kButtonColor,
-      cursorColor: MyColors.klightBlackColor,
+      borderColor: AppColors.kButtonColor,
+      focusedBorderColor: AppColors.kButtonColor,
+      cursorColor: AppColors.lightBlackColor,
       onCodeChanged: (String code) {
         Provider.of<FirebaseAuthViewModel>(context, listen: false).setOtp(code);
       },

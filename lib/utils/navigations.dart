@@ -4,4 +4,5 @@ class NavigatorClass {
   static const signUpScreen = "/userSignUp";
   static const otpScreen = "/otpRegister";
   static const splashScreen = "/splashScreen";
+  static const mainScreen = "/mainScreen";
 }

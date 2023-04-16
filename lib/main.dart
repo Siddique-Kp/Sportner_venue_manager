@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view/bottom_navbar_view.dart';
 import 'package:sportner_venue_manager/home/view/home_view.dart';
+import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/vendor_registration/view/login_view.dart';
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => FirebaseAuthViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => BottomNavViewModel(),
+        ),
       ],
       child: MaterialApp(
         title: 'sportner turf booking app',
@@ -45,29 +50,37 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(
-            scaffoldBackgroundColor: MyColors.scaffoldColor,
-            // primarySwatch: PrimaryColor.appColor,
-            primaryColor: MyColors.appMainGreenColor,
-            elevatedButtonTheme: const ElevatedButtonThemeData(
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll(MyColors.kButtonColor),
+          scaffoldBackgroundColor: AppColors.scaffoldColor,
+          // primarySwatch: PrimaryColor.appColor,
+          primaryColor: AppColors.appColor,
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(
+                AppColors.kButtonColor,
               ),
             ),
-            brightness: Brightness.light,
-            appBarTheme: const AppBarTheme(
-                titleTextStyle: TextStyle(
-                  color: MyColors.scaffoldColor,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-                elevation: 0)),
+          ),
+          brightness: Brightness.light,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppColors.white,
+            iconTheme: IconThemeData(
+              color: AppColors.black,
+
+            ),
+              titleTextStyle: TextStyle(
+                color: AppColors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+              elevation: 1),
+        ),
         routes: {
           "/splashScreen": (context) => const SplashScreen(),
           "/userSignUp": (context) => const VendorSignUpScreen(),
           "/userLogin": (context) => const VendorLoginScreen(),
           "/otpRegister": (context) => const OtpVerificationPage(),
           "/homeScreen": (context) => const HomeScreenView(),
+          "/mainScreen": (context) =>  BottomBarView(),
         },
         initialRoute: "/splashScreen",
       ),
@@ -82,5 +95,3 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
-
-
