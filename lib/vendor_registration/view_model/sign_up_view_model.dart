@@ -9,7 +9,7 @@ import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dar
 import 'package:sportner_venue_manager/utils/constants.dart';
 
 import '../../utils/keys.dart';
-import '../../utils/navigations.dart';
+import '../../utils/routes/navigations.dart';
 import '../components/snackbar.dart';
 import '../model/vendor_signup_model.dart';
 import '../repo/api_status.dart';
@@ -85,7 +85,7 @@ class SignUpViewModel with ChangeNotifier {
       clearTextField();
       setSignupStatus(accessToken!);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.mainScreen, (route) => false);
+          AppScreens.mainScreen, (route) => false);
     }
     if (response is Failure) {
       log("Failed");

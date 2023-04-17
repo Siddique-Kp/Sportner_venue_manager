@@ -1,17 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportner_venue_manager/home/view/bottom_navbar_view.dart';
-import 'package:sportner_venue_manager/home/view/home_view.dart';
 import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
-import 'package:sportner_venue_manager/vendor_registration/view/login_view.dart';
-import 'package:sportner_venue_manager/vendor_registration/view/otp_page_view.dart';
-import 'package:sportner_venue_manager/vendor_registration/view/sign_up_view.dart';
-import 'package:sportner_venue_manager/vendor_registration/view/splash_screen_view.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/sign_up_view_model.dart';
-
+import 'home/view_model/create_venue_view_model.dart';
 import 'vendor_registration/view_model/login_view_model.dart';
 
 Future<void> main() async {
@@ -38,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => BottomNavViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CreateVenueViewModel(),
         ),
       ],
       child: MaterialApp(
@@ -72,16 +70,9 @@ class MyApp extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
-              elevation: 1),
+              elevation: 3),
         ),
-        routes: {
-          "/splashScreen": (context) => const SplashScreen(),
-          "/userSignUp": (context) => const VendorSignUpScreen(),
-          "/userLogin": (context) => const VendorLoginScreen(),
-          "/otpRegister": (context) => const OtpVerificationPage(),
-          "/homeScreen": (context) => const HomeScreenView(),
-          "/mainScreen": (context) =>  BottomBarView(),
-        },
+        routes: AppScreens.routes,
         initialRoute: "/splashScreen",
       ),
     );

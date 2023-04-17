@@ -1,12 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:sportner_venue_manager/home/view/home_view.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/login_button_widget.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/registering_text_widget.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/text_form_field.dart';
-import 'package:sportner_venue_manager/utils/navigations.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import '../../utils/global_colors.dart';
 import '../../utils/global_values.dart';
 import '../../utils/textstyles.dart';
@@ -171,7 +169,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                     RegisteringText(
                       onTap: () {
                         Navigator.pushNamed(
-                            context, NavigatorClass.signUpScreen);
+                            context, AppScreens.signUpScreen);
                         context.read<LoginViewModel>().clearController();
                       },
                       leftText: "Don't have account? ",

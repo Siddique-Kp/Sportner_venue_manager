@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
-import 'package:sportner_venue_manager/utils/navigations.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/sign_up_view_model.dart';
 import '../components/image_picking_widget.dart';
@@ -124,7 +124,7 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
                           rightText: "Login",
                           onTap: () {
                             Navigator.pushReplacementNamed(
-                                context, NavigatorClass.loginScreen);
+                                context, AppScreens.loginScreen);
                             context.read<SignUpViewModel>().clearTextField();
                             context
                                 .read<SignUpViewModel>()

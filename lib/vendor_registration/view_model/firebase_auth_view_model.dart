@@ -9,9 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/snackbar.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/sign_up_view_model.dart';
 import 'package:sportner_venue_manager/utils/keys.dart';
-import '../../utils/navigations.dart';
+import '../../utils/routes/navigations.dart';
 import '../model/firebase_exeptions.dart';
-import '../view/otp_page_view.dart';
 
 class FirebaseAuthViewModel with ChangeNotifier {
   final googleSigin = GoogleSignIn();
@@ -42,7 +41,7 @@ class FirebaseAuthViewModel with ChangeNotifier {
         idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
-      navigator.pushReplacementNamed(NavigatorClass.mainScreen);
+      navigator.pushReplacementNamed(AppScreens.mainScreen);
       final sharedPref = await SharedPreferences.getInstance();
       sharedPref.setBool(GlobalKeys.vendorLoggedWithGoogle, true);
     } on PlatformException catch (e) {
@@ -82,7 +81,7 @@ class FirebaseAuthViewModel with ChangeNotifier {
         log("code sent");
         _otpResendToken = resendToken;
         _verifyOTP = verificationId;
-        Navigator.pushNamed(context, NavigatorClass.otpScreen);
+        Navigator.pushNamed(context, AppScreens.otpScreen);
         setOtpLoading(false);
       },
       codeAutoRetrievalTimeout: (String verificationId) {
@@ -158,17 +157,17 @@ class FirebaseAuthViewModel with ChangeNotifier {
       sharedPrefer.remove(GlobalKeys.vendorLoggedWithGoogle);
       await firebaseGoogleLogout();
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.loginScreen, (route) => false);
+          AppScreens.loginScreen, (route) => false);
     } else if (vendorLoggedin == true) {
       sharedPrefer.remove(GlobalKeys.vendorLoggedIN);
       sharedPrefer.remove(GlobalKeys.accesToken);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.loginScreen, (route) => false);
+          AppScreens.loginScreen, (route) => false);
     } else if (vendorSignedUp == true) {
       sharedPrefer.remove(GlobalKeys.vendorSignedUp);
       sharedPrefer.remove(GlobalKeys.accesToken);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.loginScreen, (route) => false);
+          AppScreens.loginScreen, (route) => false);
     }
   }
 

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dart';
 import 'package:sportner_venue_manager/utils/keys.dart';
 import '../../utils/constants.dart';
-import '../../utils/navigations.dart';
+import '../../utils/routes/navigations.dart';
 
 class LoginViewModel with ChangeNotifier {
   TextEditingController loginPhoneCntrllr = TextEditingController();
@@ -59,7 +59,7 @@ class LoginViewModel with ChangeNotifier {
       clearController();
       setLoginStatus(accessToken!);
       navigator.pushNamedAndRemoveUntil(
-          NavigatorClass.mainScreen, (route) => false);
+          AppScreens.mainScreen, (route) => false);
     }
 
     if (response is Failure) {

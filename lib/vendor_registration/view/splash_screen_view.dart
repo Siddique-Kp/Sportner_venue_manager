@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/view/bottom_navbar_view.dart';
-import 'package:sportner_venue_manager/home/view/home_view.dart';
 import 'package:sportner_venue_manager/vendor_registration/view/login_view.dart';
 import 'package:sportner_venue_manager/utils/keys.dart';
 
