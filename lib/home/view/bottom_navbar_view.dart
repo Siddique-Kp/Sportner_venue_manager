@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view/dashboard_view.dart';
-import 'package:sportner_venue_manager/home/view/venues_list_view.dart';
+import 'package:sportner_venue_manager/home/view/home_view.dart';
 
 import '../../utils/global_colors.dart';
 import '../view_model/bottom_navbar_view_model.dart';
-import 'home_view.dart';
-
+import 'bookings_view.dart';
 
 class BottomBarView extends StatelessWidget {
   BottomBarView({super.key});
 
   final List views = [
     const HomeScreenView(),
-    const VenuesListView(),
+    const BookingsScreenView(),
     const DashBoardView(),
   ];
 
@@ -48,14 +47,12 @@ class BottomBarView extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             label: "Venue",
-            icon: Icon(
-              CupertinoIcons.sportscourt,
-            ),
+            icon: Icon(Icons.confirmation_num_outlined),
           ),
           BottomNavigationBarItem(
             label: "Dashboard",
             icon: Icon(
-              Icons.donut_small_sharp,
+              Icons.donut_small_outlined,
             ),
           ),
         ],

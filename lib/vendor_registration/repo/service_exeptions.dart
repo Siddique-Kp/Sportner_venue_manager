@@ -5,38 +5,41 @@ import '../../utils/constants.dart';
 import 'api_status.dart';
 
 class ServiceExeptions {
-  static Object cases(Exception e) {
-    log(e.runtimeType.toString());
-    switch (e.runtimeType) {
-      case HttpException:
-        return Failure(
-          code: InvalidRespons.kNOINTERNET,
-          errorResponse: "No internet",
-        );
+  static cases(Exception e) {
+    if (e is HttpException) {
+      log("HttpException");
+      return Failure(
+        code: InvalidRespons.kNOINTERNET,
+        errorResponse: "No internet connection",
+      );
+    } else if (e is FormatException) {
+      log("FormatException");
 
-      case FormatException:
-        return Failure(
-          code: InvalidRespons.kINVALIDFORMAT,
-          errorResponse: "Invalid Format",
-        );
+      return Failure(
+        code: InvalidRespons.kINVALIDFORMAT,
+        errorResponse: "Invalid Format",
+      );
+    } else if (e is SocketException) {
+      log("SocketException");
+      // log(e.message);
+      return Failure(
+        code: InvalidRespons.kNOINTERNET,
+        errorResponse: "No internet connection",
+      );
+    } else if (e is TimeoutException) {
+      log("TimeoutException");
 
-      case SocketException:
-        return Failure(
-          code: InvalidRespons.kNOINTERNET,
-          errorResponse: "No internet",
-        );
+      return Failure(
+        code: InvalidRespons.kTIMEOUT,
+        errorResponse: "Time out try again",
+      );
+    } else {
+      log("Failure");
 
-      case TimeoutException:
-        return Failure(
-          code: InvalidRespons.kTIMEOUT,
-          errorResponse: "Time out try again",
-        );
-
-      default:
-        return Failure(
-          code: InvalidRespons.kUNKNOWNERROR,
-          errorResponse: "Unknown Error",
-        );
+      return Failure(
+        code: InvalidRespons.kUNKNOWNERROR,
+        errorResponse: "Unknown Error",
+      );
     }
   }
 }

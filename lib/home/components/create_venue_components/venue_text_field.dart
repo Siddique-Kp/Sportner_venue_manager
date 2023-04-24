@@ -39,36 +39,64 @@ class VenueTextFldWidget extends StatelessWidget {
             ),
           ),
           AppSizes.kHeight5,
-          TextFormField(
+          VenueTextField(
             controller: controller,
-            maxLines: isDescription ? 5 : 1,
+            isDescription: isDescription,
             keyboardType: keyboardType,
-            validator: (value) {
-              if (isMobile) {
-                if (value == null || value.isEmpty) {
-                  return "Mobile number is required";
-                } else if (value.length != 10) {
-                  return "Enter valid mobile number";
-                }
-              }
-              if (value == null || value.isEmpty) {
-                return "This field is required";
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(5),
-              hintText: hintText,
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColors.appColor),
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
+            isMobile: isMobile,
+            hintText: hintText,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class VenueTextField extends StatelessWidget {
+  const VenueTextField({
+    super.key,
+    required this.controller,
+    this.isDescription = false,
+    required this.keyboardType,
+    this.isMobile = false,
+    required this.hintText,
+  });
+
+  final TextEditingController controller;
+  final bool isDescription;
+  final TextInputType keyboardType;
+  final bool isMobile;
+  final String hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      maxLines: isDescription ? 5 : 1,
+      keyboardType: keyboardType,
+      validator: (value) {
+        if (isMobile) {
+          if (value == null || value.isEmpty) {
+            return "Mobile number is required";
+          } else if (value.length != 10) {
+            return "Enter valid mobile number";
+          }
+        }
+        if (value == null || value.isEmpty) {
+          return "This field is required";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(5),
+        hintText: hintText,
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: AppColors.appColor),
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
       ),
     );
   }

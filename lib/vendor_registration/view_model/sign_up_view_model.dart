@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/vendor_registration/model/login_error_model.dart';
 import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
-
 import '../../utils/keys.dart';
 import '../../utils/routes/navigations.dart';
 import '../components/snackbar.dart';
@@ -141,8 +140,8 @@ class SignUpViewModel with ChangeNotifier {
       _image = pickedImage;
       notifyListeners();
       return _image;
-    } on PlatformException catch (e) {
-      log(e.code.toString());
+    } on PlatformException{
+      return SnackBarWidget.snackBar(context, "Something went wrong");
     }
   }
 }

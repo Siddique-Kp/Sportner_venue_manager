@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 
 import '../components/create_venue_components/district_picker_field.dart';
 import '../components/create_venue_components/venue_text_field.dart';
@@ -70,9 +71,12 @@ class CreateVenueView extends StatelessWidget {
                         width: 100,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_firstKey.currentState!.validate()) {
-                              log("form");
-                            }
+                             Navigator.pushNamed(
+                                context, AppScreens.createVenueScndScreen);
+                            // if (_firstKey.currentState!.validate()) {
+                            //   log("form");
+                            // }
+                           
                           },
                           style: ElevatedButton.styleFrom(elevation: 0),
                           child: const Text("Next"),

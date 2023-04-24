@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../../utils/constants.dart';
 import 'api_status.dart';
+import 'service_exeptions.dart';
 
 class ApiServices {
   static Future<Object> postMethod(
@@ -19,40 +18,14 @@ class ApiServices {
         log("Success");
         return Success(response: function(response.body));
       }
-
       log(response.body.toLowerCase());
       log(response.statusCode.toString());
-
       return Failure(
         code: response.statusCode,
         errorResponse: "Invalid Response",
       );
-    } on HttpException {
-      return Failure(
-        code: InvalidRespons.kNOINTERNET,
-        errorResponse: "No internet",
-      );
-    } on FormatException {
-      return Failure(
-        code: InvalidRespons.kINVALIDFORMAT,
-        errorResponse: "Invalid Format",
-      );
-    } on SocketException {
-      return Failure(
-        code: InvalidRespons.kNOINTERNET,
-        errorResponse: "No internet",
-      );
-    } on TimeoutException {
-      return Failure(
-        code: InvalidRespons.kTIMEOUT,
-        errorResponse: "Time out try again",
-      );
-    } catch (e) {
-      log(e.runtimeType.toString());
-      return Failure(
-        code: InvalidRespons.kUNKNOWNERROR,
-        errorResponse: "Unknown Error",
-      );
+    } on Exception catch (e) {
+      return ServiceExeptions.cases(e);
     }
   }
 }

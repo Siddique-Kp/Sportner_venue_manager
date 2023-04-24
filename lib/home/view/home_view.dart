@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sportner_venue_manager/home/components/bookings_components/online_booking_widget.dart';
+import 'package:sportner_venue_manager/home/components/venues_list_components/vendor_turf_cartd.dart';
+import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
-import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
-
-import '../components/bookings_components/offline_booking_widget.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 
 class HomeScreenView extends StatelessWidget {
   const HomeScreenView({super.key});
@@ -12,31 +10,35 @@ class HomeScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Bookings"),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  context
-                      .read<FirebaseAuthViewModel>()
-                      .vendorLoginStatus(context);
-                },
-                icon: const Icon(Icons.logout))
+      backgroundColor:const Color.fromARGB(116, 214, 214, 214),
+      appBar: AppBar(
+        backgroundColor: AppColors.appColor,
+        centerTitle: true,
+        elevation: 1,
+        title: const Text(
+          "Your Venues",
+          style: TextStyle(
+            color: AppColors.white,
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView(
+          children: const [
+            AppSizes.kHeight20,
+            VendorTurfCard(),
+            SizedBox(height: 70)
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ListView(
-            children:const [
-               OnlineBookingWidget(),
-              AppSizes.kHeight30,
-               OfflineBookingWidget(),
-            ],
-          ),
-        ));
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppScreens.createVenuefrstScreen);
+        },
+        backgroundColor: AppColors.appColor,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
-
-
-
-

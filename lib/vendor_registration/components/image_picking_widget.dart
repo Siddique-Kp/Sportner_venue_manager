@@ -52,13 +52,14 @@ class ImagePickingWidget extends StatelessWidget {
                 width: 90,
                 height: 30,
                 child: const Center(
-                    child: Text(
-                  "Choose file",
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.w500,
+                  child: Text(
+                    "Choose file",
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                )),
+                ),
               ),
             )
           ],

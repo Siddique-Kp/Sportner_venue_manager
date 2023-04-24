@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:sportner_venue_manager/vendor_registration/components/snackbar.dart';
 import 'package:sportner_venue_manager/vendor_registration/model/login_error_model.dart';
@@ -42,7 +41,6 @@ class LoginViewModel with ChangeNotifier {
 
   setLoginError(LoginError loginError, context) async {
     _loginError = loginError;
-
     return errorResonses(_loginError!, context);
   }
 
