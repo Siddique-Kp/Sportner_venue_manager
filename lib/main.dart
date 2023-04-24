@@ -7,6 +7,7 @@ import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_a
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/sign_up_view_model.dart';
 import 'home/view_model/create_venue_view_model.dart';
+import 'home/view_model/home_view_model.dart';
 import 'vendor_registration/view_model/login_view_model.dart';
 
 Future<void> main() async {
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CreateVenueViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HomeViewModel(),
         ),
       ],
       child: MaterialApp(

@@ -43,14 +43,17 @@ class SplashScreen extends StatelessWidget {
 
 Future<Widget> loginStatus() async {
   final status = await SharedPreferences.getInstance();
-  final vendorLoggedIn = status.getBool(GlobalKeys.vendorLoggedIN);
-  final vendorSignedIn = status.getBool(GlobalKeys.vendorSignedUp);
-  final vendorSignedWithGoogle = status.getBool(GlobalKeys.vendorLoggedWithGoogle);
-  if (vendorLoggedIn == false ||
-      vendorLoggedIn == null && vendorSignedIn == false ||
-      vendorSignedIn == null && vendorSignedWithGoogle == false ||
-      vendorSignedWithGoogle == null) {
+  final vendorLoggedIn = status.getBool(GlobalKeys.vendorLoggedIN) ?? false;
+  final vendorSignedIn = status.getBool(GlobalKeys.vendorSignedUp) ?? false;
+  final vendorSignedWithGoogle =
+      status.getBool(GlobalKeys.vendorLoggedWithGoogle) ?? false;
+  log(vendorSignedIn.toString());
+  log(vendorLoggedIn.toString());
+  log(vendorSignedWithGoogle.toString());
+  if (vendorLoggedIn == false &&
+      vendorSignedIn == false &&
+      vendorSignedWithGoogle == false) {
     return const VendorLoginScreen();
   }
-  return  BottomBarView();
+  return BottomBarView();
 }

@@ -48,14 +48,17 @@ class LoginViewModel with ChangeNotifier {
     final navigator = Navigator.of(context);
     setLoading(true);
     final response = await ApiServices.postMethod(
-        Urls.kBASEURL + Urls.kVENDORSIGNIN, vendorDataBody(),vendorLoginModelFromJson);
+      Urls.kVENDORSIGNIN,
+      vendorDataBody(),
+      vendorLoginModelFromJson,
+    );
 
     if (response is Success) {
       final data = await setvendorData(response.response as VendorLoginModel);
       final accessToken = data!.accessToken;
       log(accessToken.toString());
       clearController();
-      setLoginStatus(accessToken!);
+      await setLoginStatus(accessToken!);
       navigator.pushNamedAndRemoveUntil(
           AppScreens.mainScreen, (route) => false);
     }
@@ -101,6 +104,6 @@ class LoginViewModel with ChangeNotifier {
     if (statusCode == 401) {
       return SnackBarWidget.snackBar(context, "Invalid username or password");
     }
-    return SnackBarWidget.snackBar(context,loginError.message.toString());
+    return SnackBarWidget.snackBar(context, loginError.message.toString());
   }
 }

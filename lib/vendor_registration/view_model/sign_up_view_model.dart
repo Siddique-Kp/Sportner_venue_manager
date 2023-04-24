@@ -73,7 +73,7 @@ class SignUpViewModel with ChangeNotifier {
     final navigator = Navigator.of(context);
     setLoading(true);
     final response = await ApiServices.postMethod(
-      Urls.kBASEURL + Urls.kVENDORSIGNUP,
+      Urls.kVENDORSIGNUP,
       vendorDatabody(),
       vendorSignupModelFromJson,
     );
@@ -140,7 +140,7 @@ class SignUpViewModel with ChangeNotifier {
       _image = pickedImage;
       notifyListeners();
       return _image;
-    } on PlatformException{
+    } on PlatformException {
       return SnackBarWidget.snackBar(context, "Something went wrong");
     }
   }
