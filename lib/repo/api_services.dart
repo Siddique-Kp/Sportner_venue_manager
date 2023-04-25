@@ -16,7 +16,10 @@ class ApiServices {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         log("Success");
-        return Success(response: function(response.body));
+        return Success(
+          response: function(response.body),
+          code: response.statusCode,
+        );
       }
       log(response.body.toLowerCase());
       log(response.statusCode.toString());

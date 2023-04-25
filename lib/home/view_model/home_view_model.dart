@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
 import 'package:sportner_venue_manager/utils/keys.dart';
-import 'package:sportner_venue_manager/vendor_registration/repo/api_services.dart';
-import 'package:sportner_venue_manager/vendor_registration/repo/api_status.dart';
+import 'package:sportner_venue_manager/repo/api_services.dart';
+import 'package:sportner_venue_manager/repo/api_status.dart';
 
 class HomeViewModel with ChangeNotifier {
   List<VmVenueDataModel> _vmVenueDataList = [];

@@ -77,8 +77,8 @@ class VendorTurfCard extends StatelessWidget {
       child: CircleAvatar(
         backgroundColor: Color.fromARGB(255, 225, 225, 225),
         child: Icon(
-          Icons.delete,
-          color: Color.fromARGB(187, 244, 67, 54),
+          Icons.block,
+          color: Color.fromARGB(186, 255, 17, 0),
         ),
       ),
     );

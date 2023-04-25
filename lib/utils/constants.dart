@@ -3,6 +3,7 @@ class Urls {
   static const String kVENDORSIGNIN = "$kBASEURL/vm/signin";
   static const String kVENDORSIGNUP = "$kBASEURL/vmSignup";
   static const String kGetAllVenues = "$kBASEURL/vm/turfs";
+  static const String kGetAllbooking = "$kBASEURL/vm/bookings";
 }
 
 class InvalidRespons {

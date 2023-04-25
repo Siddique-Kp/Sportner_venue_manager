@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import '../../utils/constants.dart';
+import '../utils/constants.dart';
 import 'api_status.dart';
 
 class ServiceExeptions {

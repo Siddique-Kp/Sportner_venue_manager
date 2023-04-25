@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import '../../utils/global_colors.dart';
 import '../../vendor_registration/view_model/firebase_auth_view_model.dart';
@@ -48,12 +49,33 @@ class BookingsScreenView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: ListView(
-            children: const [
-              AppSizes.kHeight20,
-              BookingCard(),
-            ],
-          ),
+          child: FutureBuilder(
+              future: context.read<BookingViewModel>().getBookingDatas(),
+              builder: (context, snapshot) {
+                final bookingDataList =
+                    context.watch<BookingViewModel>().bookingDataList;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.data == null) {
+                  return const Center(
+                    child: Text("No bookings yet"),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("Something went wrong"),
+                  );
+                }
+                return ListView(
+                  children: [
+                    AppSizes.kHeight20,
+                    BookingCard(bookingDataList: bookingDataList),
+                  ],
+                );
+              }),
         ),
       ),
     );

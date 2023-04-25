@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sportner_venue_manager/home/components/venues_list_components/sports_icon.dart';
+import 'package:sportner_venue_manager/home/model/booking_data_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
-
 import '../../../utils/global_colors.dart';
 import '../../../utils/textstyles.dart';
 import 'separator.dart';
 
 class BookingCard extends StatelessWidget {
+  final List<BookingDataModel> bookingDataList;
   const BookingCard({
     super.key,
+    required this.bookingDataList,
   });
 
   @override
@@ -15,7 +18,7 @@ class BookingCard extends StatelessWidget {
     return ListView.separated(
         shrinkWrap: true,
         physics: const ScrollPhysics(),
-        itemCount: 10,
+        itemCount: bookingDataList.length,
         separatorBuilder: (context, index) => AppSizes.kHeight10,
         itemBuilder: (context, index) {
           return Card(
@@ -34,12 +37,12 @@ class BookingCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    _cardTopSide(),
+                    _cardTopSide(index),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: SeparatorWidget(),
                     ),
-                    _cardBottomSide(),
+                    _cardBottomSide(index),
                   ],
                 ),
               ),
@@ -48,7 +51,7 @@ class BookingCard extends StatelessWidget {
         });
   }
 
-  Expanded _cardBottomSide() {
+  Expanded _cardBottomSide(int index) {
     return Expanded(
       flex: 2,
       child: Row(
@@ -62,14 +65,14 @@ class BookingCard extends StatelessWidget {
                 size: 20,
               ),
               Text(
-                "Siddique",
+                bookingDataList[index].name!,
                 style: AppTextStyles.textH4,
               ),
             ],
           ),
-          const Text(
-            "₹1000",
-            style: TextStyle(
+          Text(
+            "₹${bookingDataList[index].price}",
+            style: const TextStyle(
               color: AppColors.appColor,
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -80,33 +83,39 @@ class BookingCard extends StatelessWidget {
     );
   }
 
-  Expanded _cardTopSide() {
+  Expanded _cardTopSide(int index) {
     return Expanded(
       flex: 4,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _timeContainer(time: "05:30", status: "From"),
+          _timeContainer(
+            time: bookingDataList[index].slotTime!.split("-").first,
+            status: "From",
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
-                  const Icon(Icons.sports_soccer),
+                   Icon(Sports.spots(sport: bookingDataList[index].sport!)),
                   Text(
-                    "5 v 5",
+                    bookingDataList[index].facility!,
                     style: AppTextStyles.textH4,
                   ),
                 ],
               ),
               Text(
-                "13 Mar,2023",
+                bookingDataList[index].slotDate!,
                 style: AppTextStyles.textH5,
               ),
             ],
           ),
-          _timeContainer(status: "To", time: "06:30"),
+          _timeContainer(
+            status: "To",
+            time: bookingDataList[index].slotTime!.split("-").last,
+          ),
         ],
       ),
     );
