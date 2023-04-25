@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../home/view/bottom_navbar_view.dart';
 import '../../home/view/create_venue_scnd_view.dart';
+import '../../home/view/create_venue_third_view.dart';
 import '../../home/view/create_venue_view.dart';
 import '../../home/view/bookings_view.dart';
 import '../../vendor_registration/view/login_view.dart';
@@ -29,5 +30,6 @@ class AppScreens {
     "/mainScreen": (context) => BottomBarView(),
     "/createVenuefrstScreen": (context) => CreateVenueView(),
     "/createVenueScndScreen": (context) => const CreateVenueScndView(),
+    "/createVenueThirdScreen": (context) => const CreateVenueThirdView(),
   };
 }

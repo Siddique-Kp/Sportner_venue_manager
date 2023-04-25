@@ -39,13 +39,13 @@ class ApiServices {
     try {
       final response = await http.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        log(response.body.toString());
+        // log(response.body.toString());
 
         return Success(
           response: jsonDecod == null ? null : jsonDecod(response.body),
         );
       }
-      log(response.body.toString());
+      // log(response.body.toString());
 
       return Failure(
           code: response.statusCode, errorResponse: "Invalid Response");

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
-import '../../view_model/create_venue_view_model.dart';
 
 class VenueTextFldWidget extends StatelessWidget {
   final TextEditingController controller;
@@ -23,7 +21,6 @@ class VenueTextFldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final createVenueViewModel = context.watch<CreateVenueViewModel>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -32,10 +29,8 @@ class VenueTextFldWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: createVenueViewModel.isFocused
-                  ? Colors.green
-                  : AppColors.black,
+            style: const TextStyle(
+              color: AppColors.black,
             ),
           ),
           AppSizes.kHeight5,

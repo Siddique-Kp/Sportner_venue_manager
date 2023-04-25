@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
@@ -70,13 +68,16 @@ class CreateVenueView extends StatelessWidget {
                         height: 40,
                         width: 100,
                         child: ElevatedButton(
-                          onPressed: () {
-                             Navigator.pushNamed(
+                          onPressed: () async {
+                            await context
+                                .read<CreateVenueViewModel>()
+                                .getAllSports();
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushNamed(
                                 context, AppScreens.createVenueScndScreen);
                             // if (_firstKey.currentState!.validate()) {
                             //   log("form");
                             // }
-                           
                           },
                           style: ElevatedButton.styleFrom(elevation: 0),
                           child: const Text("Next"),

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,10 +15,15 @@ import '../model/vendor_signup_model.dart';
 import '../../repo/api_status.dart';
 
 class SignUpViewModel with ChangeNotifier {
-  final TextEditingController userNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passController = TextEditingController();
-  final TextEditingController confirfPassController = TextEditingController();
+  final userNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final passController = TextEditingController();
+  final confirfPassController = TextEditingController();
+  final cloudinary = Cloudinary.signedConfig(
+    apiKey: "379449483728479",
+    apiSecret: "P84yD201T01-JblVWczdP-1GB_Q",
+    cloudName: "dkd1urq1v",
+  );
 
   bool _isShowPassword = true;
   bool _isShowConfPassword = true;
@@ -25,6 +31,7 @@ class SignUpViewModel with ChangeNotifier {
   SignUpError? _signUpError;
   VendorSignupModel? _vendorData;
   File? _image;
+  String? _cloudImage;
 
   bool get isShowPassword => _isShowPassword;
   bool get isShowConfPassword => _isShowConfPassword;
@@ -114,7 +121,7 @@ class SignUpViewModel with ChangeNotifier {
       name: userNameController.text,
       mobile: phoneController.text,
       password: passController.text,
-      image: _image!.uri.toString(),
+      image: _cloudImage,
     );
     return body.toJson();
   }
@@ -129,7 +136,7 @@ class SignUpViewModel with ChangeNotifier {
   }
 
   // ---- Pick image from gallery
-  Future imagePicker(context) async {
+  imagePicker(context) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) {
@@ -137,11 +144,24 @@ class SignUpViewModel with ChangeNotifier {
       }
 
       final pickedImage = File(image.path);
+
       _image = pickedImage;
+      _cloudImage = await cloudinaryImage(pickedImage);
       notifyListeners();
-      return _image;
     } on PlatformException {
       return SnackBarWidget.snackBar(context, "Something went wrong");
     }
+  }
+
+  Future<String?> cloudinaryImage(File file) async {
+    final response = await cloudinary.upload(
+      file: file.path,
+      fileBytes: file.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+    );
+    if (response.isSuccessful) {
+      return response.secureUrl;
+    }
+    return null;
   }
 }

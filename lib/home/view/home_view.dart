@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportner_venue_manager/home/components/shimmer_widget.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/vendor_turf_cartd.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';

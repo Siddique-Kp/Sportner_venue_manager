@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
+import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import '../../utils/global_colors.dart';
 import '../../vendor_registration/view_model/firebase_auth_view_model.dart';
@@ -28,6 +29,7 @@ class BookingsScreenView extends StatelessWidget {
                 context
                     .read<FirebaseAuthViewModel>()
                     .vendorLoginStatus(context);
+                context.read<BottomNavViewModel>().changeBottomNavindex(0);
               },
               icon: const Icon(Icons.logout))
         ],
