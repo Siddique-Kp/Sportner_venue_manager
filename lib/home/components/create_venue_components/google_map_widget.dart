@@ -11,7 +11,6 @@ class GoogleMapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final googleMapViewModel = context.watch<GoogleMapViewModel>();
     log("multibuild");
     try {
@@ -29,7 +28,6 @@ class GoogleMapWidget extends StatelessWidget {
               ),
               onMapCreated: (controller) {
                 googleMapViewModel.getControllervalue(controller);
-                // googleMapViewModel.mapController.complete(controller);
               },
               markers: {
                 Marker(
@@ -38,7 +36,12 @@ class GoogleMapWidget extends StatelessWidget {
                     googleMapViewModel.currentLocation!.latitude!,
                     googleMapViewModel.currentLocation!.longitude!,
                   ),
-                )
+                ),
+                if (googleMapViewModel.selectedMarker != null)
+                  googleMapViewModel.selectedMarker!,
+              },
+              onLongPress: (latlong) {
+                googleMapViewModel.addMarker(latlong, googleMapViewModel);
               },
             );
     } catch (error, stackTrace) {

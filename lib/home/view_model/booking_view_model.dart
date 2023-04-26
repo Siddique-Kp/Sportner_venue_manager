@@ -9,6 +9,10 @@ import '../../repo/api_services.dart';
 import '../../repo/api_status.dart';
 
 class BookingViewModel with ChangeNotifier {
+  BookingViewModel() {
+    getBookingDatas();
+  }
+
   List<BookingDataModel> _bookingDataList = [];
   ErrorResponseModel? _errorResponseModel;
   bool _isLoading = false;
@@ -16,8 +20,8 @@ class BookingViewModel with ChangeNotifier {
   List<BookingDataModel> get bookingDataList => _bookingDataList;
   bool get isLoading => _isLoading;
 
-  Future<List<BookingDataModel>?> getBookingDatas() async {
-    setLoading(false);
+  getBookingDatas() async {
+    setLoading(true);
     final accessToken = await getAccessToken();
     final response = await ApiServices.getMethod(
       url: Urls.kGetAllbooking,
@@ -28,7 +32,7 @@ class BookingViewModel with ChangeNotifier {
     if (response is Success) {
       setLoading(false);
       log("success");
-    return  setBookingDatas(response.response as List<BookingDataModel>);
+      setBookingDatas(response.response as List<BookingDataModel>);
     }
 
     if (response is Failure) {
@@ -38,15 +42,13 @@ class BookingViewModel with ChangeNotifier {
         code: response.code,
         message: response.errorResponse,
       );
-      return setErrorResponse(errorResponse);
+      setErrorResponse(errorResponse);
     }
-    return null;
   }
 
-  List<BookingDataModel> setBookingDatas(
-      List<BookingDataModel> bookingDataList) {
+  setBookingDatas(List<BookingDataModel> bookingDataList) {
     _bookingDataList = bookingDataList;
-    return _bookingDataList;
+    notifyListeners();
   }
 
   setErrorResponse(ErrorResponseModel errorResp) {
@@ -57,6 +59,7 @@ class BookingViewModel with ChangeNotifier {
 
   setLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
   }
 
   Future<String?> getAccessToken() async {

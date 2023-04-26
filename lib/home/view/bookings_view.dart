@@ -12,6 +12,7 @@ class BookingsScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookingViewModel = context.watch<BookingViewModel>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.appColor,
@@ -25,13 +26,12 @@ class BookingsScreenView extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-              onPressed: () async {
-                context
-                    .read<FirebaseAuthViewModel>()
-                    .vendorLoginStatus(context);
-                context.read<BottomNavViewModel>().changeBottomNavindex(0);
-              },
-              icon: const Icon(Icons.logout))
+            onPressed: () async {
+              context.read<FirebaseAuthViewModel>().vendorLoginStatus(context);
+              context.read<BottomNavViewModel>().changeBottomNavindex(0);
+            },
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
       body: Container(
@@ -51,33 +51,14 @@ class BookingsScreenView extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: FutureBuilder(
-              future: context.read<BookingViewModel>().getBookingDatas(),
-              builder: (context, snapshot) {
-                final bookingDataList =
-                    context.watch<BookingViewModel>().bookingDataList;
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.data == null) {
-                  return const Center(
-                    child: Text("No bookings yet"),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return const Center(
-                    child: Text("Something went wrong"),
-                  );
-                }
-                return ListView(
-                  children: [
-                    AppSizes.kHeight20,
-                    BookingCard(bookingDataList: bookingDataList),
-                  ],
-                );
-              }),
+          child: ListView(
+            children: [
+              AppSizes.kHeight20,
+              BookingCard(
+                bookingDataList: bookingViewModel.bookingDataList,
+              ),
+            ],
+          ),
         ),
       ),
     );

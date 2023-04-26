@@ -8,15 +8,21 @@ import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 
 class HomeViewModel with ChangeNotifier {
+  HomeViewModel() {
+    getVmVenueDatas();
+  }
   List<VmVenueDataModel> _vmVenueDataList = [];
   bool _isLoading = false;
 
   List<VmVenueDataModel> get vmVenueDataList => _vmVenueDataList;
   bool get isLoading => _isLoading;
 
-  Future<List<VmVenueDataModel>?> getVmVenueDatas() async {
-    setLoading(false);
+  getVmVenueDatas() async {
+    setLoading(true);
+    await Future.delayed(const Duration(seconds: 3));
+
     final accessToken = await getAccessToken();
+
     final response = await ApiServices.getMethod(
       url: Urls.kGetAllVenues,
       jsonDecod: vmVenueDataModelFromJson,
@@ -26,24 +32,23 @@ class HomeViewModel with ChangeNotifier {
     if (response is Success) {
       setLoading(false);
       log("success");
-      return setVmVenueDatas(response.response as List<VmVenueDataModel>);
+      setVmVenueDatas(response.response as List<VmVenueDataModel>);
     }
 
     if (response is Failure) {
       log("failed");
-      return setLoading(false);
+      setLoading(false);
     }
-    return null;
   }
 
-  List<VmVenueDataModel> setVmVenueDatas(
-      List<VmVenueDataModel> vmVenueDataList) {
+  setVmVenueDatas(List<VmVenueDataModel> vmVenueDataList) {
     _vmVenueDataList = vmVenueDataList;
-    return _vmVenueDataList;
+    notifyListeners();
   }
 
   setLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
   }
 
   Future<String?> getAccessToken() async {

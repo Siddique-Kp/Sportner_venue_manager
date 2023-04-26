@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -12,9 +11,16 @@ class GoogleMapViewModel with ChangeNotifier {
   LocationData? currentLocation;
   final Completer<GoogleMapController> _mapController = Completer();
   GoogleMapController? _googleMapController;
+  Marker? _selectedMarker;
 
   Completer<GoogleMapController> get mapController => _mapController;
   GoogleMapController? get googleMapController => _googleMapController;
+  Marker? get selectedMarker => _selectedMarker;
+
+  setSelectedMarker(Marker? selectedPosition) {
+    _selectedMarker = selectedPosition;
+    notifyListeners();
+  }
 
   getControllervalue(GoogleMapController controller) {
     _googleMapController = controller;
@@ -47,5 +53,19 @@ class GoogleMapViewModel with ChangeNotifier {
     //     notifyListeners();
     //   },
     // );
+  }
+
+  addMarker(LatLng position, GoogleMapViewModel googleMapViewModel) {
+    if (googleMapViewModel.selectedMarker != null) {
+      setSelectedMarker(null);
+    } else {
+      final selectedLocation = Marker(
+        markerId: const MarkerId("SelectedLocation"),
+        infoWindow: const InfoWindow(title: "Selected Location"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        position: position,
+      );
+      setSelectedMarker(selectedLocation);
+    }
   }
 }

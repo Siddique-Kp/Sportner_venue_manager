@@ -21,7 +21,6 @@ class SplashScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          log(snapshot.data.toString());
           return AnimatedSplashScreen(
             splashIconSize: double.infinity,
             splash: Padding(
@@ -47,9 +46,6 @@ Future<Widget> loginStatus() async {
   final vendorSignedIn = status.getBool(GlobalKeys.vendorSignedUp) ?? false;
   final vendorSignedWithGoogle =
       status.getBool(GlobalKeys.vendorLoggedWithGoogle) ?? false;
-  log(vendorSignedIn.toString());
-  log(vendorLoggedIn.toString());
-  log(vendorSignedWithGoogle.toString());
   if (vendorLoggedIn == false &&
       vendorSignedIn == false &&
       vendorSignedWithGoogle == false) {
