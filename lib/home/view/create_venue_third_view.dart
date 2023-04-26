@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
+import '../components/create_venue_components/google_map_widget.dart';
 import '../components/create_venue_components/select_time_slot_components.dart';
 
 class CreateVenueThirdView extends StatelessWidget {
@@ -25,13 +27,24 @@ class CreateVenueThirdView extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Select location"),
+                    TextButton(
+                      style: const ButtonStyle(
+                          padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppScreens.selectMapScreen,
+                        );
+                      },
+                      child: const Text("Tap to Select location"),
+                    ),
                     AppSizes.kHeight10,
                     Container(
-                      height: 100,
+                      height: 150,
                       width: double.infinity,
-                      color: Colors.grey,
-                    )
+                      color: AppColors.lightgrey,
+                      child: const GoogleMapWidget(),
+                    ),
                   ],
                 ),
                 AppSizes.kHeight30,

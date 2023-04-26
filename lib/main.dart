@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
 import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
+import 'package:sportner_venue_manager/home/view_model/google_map_view_model.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import 'package:sportner_venue_manager/vendor_registration/view_model/firebase_auth_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => BookingViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GoogleMapViewModel(),
         ),
         
       ],

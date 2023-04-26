@@ -5,6 +5,7 @@ import '../../home/view/create_venue_scnd_view.dart';
 import '../../home/view/create_venue_third_view.dart';
 import '../../home/view/create_venue_view.dart';
 import '../../home/view/bookings_view.dart';
+import '../../home/view/select_map_view.dart';
 import '../../vendor_registration/view/login_view.dart';
 import '../../vendor_registration/view/otp_page_view.dart';
 import '../../vendor_registration/view/sign_up_view.dart';
@@ -20,6 +21,7 @@ class AppScreens {
   static const createVenuefrstScreen = "/createVenuefrstScreen";
   static const createVenueScndScreen = "/createVenueScndScreen";
   static const createVenueThirdScreen = "/createVenueThirdScreen";
+  static const selectMapScreen = "/selectMapScreen";
 
   static Map<String, Widget Function(BuildContext)> routes = {
     "/splashScreen": (context) => const SplashScreen(),
@@ -31,5 +33,6 @@ class AppScreens {
     "/createVenuefrstScreen": (context) => CreateVenueView(),
     "/createVenueScndScreen": (context) => const CreateVenueScndView(),
     "/createVenueThirdScreen": (context) => const CreateVenueThirdView(),
+    "/selectMapScreen": (context) => const SelectMapView(),
   };
 }

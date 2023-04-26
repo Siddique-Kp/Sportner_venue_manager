@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:sportner_venue_manager/home/components/shimmer_widget.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 
 import '../../../utils/global_colors.dart';
@@ -143,15 +144,16 @@ class VendorTurfCard extends StatelessWidget {
     );
   }
 
-  Container _imageContainer(Size size, int index) {
+  Widget _imageContainer(Size size, int index) {
     return Container(
       height: size.height * 0.18,
       width: size.width * 0.833,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
-            image: NetworkImage(vmVenueDataList[index].image!),
-            fit: BoxFit.cover),
+          image: NetworkImage(vmVenueDataList[index].image!),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
