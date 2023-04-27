@@ -12,7 +12,6 @@ class GoogleMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final googleMapViewModel = context.watch<GoogleMapViewModel>();
-    log("multibuild");
     try {
       return googleMapViewModel.currentLocation == null
           ? ShimmerWidget.rectangle(width: double.infinity, height: height)

@@ -1,45 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 
 import '../../../utils/global_colors.dart';
+import '../../view_model/create_venue_view_model.dart';
 
-class WeeksByDay {
-  final String weekName;
-  final GestureTapCallback? onTap;
-
-  WeeksByDay({
-    required this.weekName,
-    required this.onTap,
-  });
-
-  static List<WeeksByDay> days = [
-    WeeksByDay(
-      weekName: "Sunday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Monday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Thuesday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Wednesday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Thursday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Friday",
-      onTap: () {},
-    ),
-    WeeksByDay(
-      weekName: "Saturday",
-      onTap: () {},
-    ),
+class TimeSlotByDays {
+  static List<String> days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
 
   static List<String> timeSlotList = [
@@ -69,7 +43,17 @@ class WeeksByDay {
     "23:00-00:00",
   ];
 
-  static timeSlotBottomSheet(BuildContext context) {
+//  static List<Slot> slots = [
+//     {"day": "Sunday", "slots": []},
+//     {"day": "Monday", "slots": []},
+//     {"day": "Tuesday", "slots": []},
+//     {"day": "Wednesday", "slots": []},
+//     {"day": "Thursday", "slots": []},
+//     {"day": "Friday", "slots": []},
+//     {"day": "Saturday", "slots": []},
+//   ];
+
+  static timeSlotBottomSheet(BuildContext context, String days, int dayIndex) {
     return showModalBottomSheet(
       shape: const OutlineInputBorder(
         borderSide: BorderSide(color: AppColors.white),
@@ -92,10 +76,23 @@ class WeeksByDay {
             ),
             itemCount: 24,
             itemBuilder: (BuildContext context, int index) {
+              final checkBoxValue = context
+                  .watch<CreateVenueViewModel>()
+                  .dayCheckboxValues[days]![index];
               return CheckboxListTile(
-                title:  Text(WeeksByDay.timeSlotList[index]),
-                value: false,
-                onChanged: (newValue) {},
+                title: Text(TimeSlotByDays.timeSlotList[index]),
+                value: checkBoxValue,
+                onChanged: (value) {
+                  context
+                      .read<CreateVenueViewModel>()
+                      .setSelectedTime(value!, days, index);
+                  context.read<CreateVenueViewModel>().setTimeSlot(
+                        TimeSlotByDays.timeSlotList[index],
+                        value,
+                        days,
+                        dayIndex,
+                      );
+                },
                 controlAffinity: ListTileControlAffinity.leading,
               );
             },

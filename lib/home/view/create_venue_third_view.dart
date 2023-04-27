@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
+import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../components/create_venue_components/google_map_widget.dart';
 import '../components/create_venue_components/select_time_slot_components.dart';
+
 
 class CreateVenueThirdView extends StatelessWidget {
   const CreateVenueThirdView({super.key});
@@ -24,95 +28,115 @@ class CreateVenueThirdView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppSizes.kHeight20,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextButton(
-                      style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppScreens.selectMapScreen,
-                        );
-                      },
-                      child: const Text("Tap to Select location"),
-                    ),
-                    AppSizes.kHeight10,
-                    Container(
-                      height: 150,
-                      width: double.infinity,
-                      color: AppColors.lightgrey,
-                      child: const GoogleMapWidget(),
-                    ),
-                  ],
-                ),
+                _selectLocation(context),
                 AppSizes.kHeight30,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Select slot"),
-                    AppSizes.kHeight20,
-                    SizedBox(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 3,
-                        ),
-                        itemCount: 7,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              WeeksByDay.timeSlotBottomSheet(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: AppColors.lightgrey,
-                              ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(WeeksByDay.days[index].weekName),
-                                    AppSizes.kWidth10,
-                                    const Icon(Icons.expand_more),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                _selecTimeSlot(),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 45,
-                    width: 100,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(elevation: 0),
-                      onPressed: () {},
-                      child: const Text("SUBMIT"),
-                    ),
-                  )
-                ],
-              ),
-            ),
+            _submitbutton(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _submitbutton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            height: 40,
+            width: 100,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(elevation: 0),
+              onPressed: () {},
+              child: const Text("SUBMIT"),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Column _selecTimeSlot() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Select slot",
+          style: AppTextStyles.textH3,
+        ),
+        AppSizes.kHeight20,
+        GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 3,
+          ),
+          itemCount: 7,
+          itemBuilder: (BuildContext context, int dayIndex) {
+            final days = TimeSlotByDays.days;
+            return InkWell(
+              onTap: () {
+                TimeSlotByDays.timeSlotBottomSheet(context, days[dayIndex],dayIndex);
+                
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: AppColors.lightgrey,
+                ),
+                child: Center(
+                  child: SizedBox(
+                    width: 110,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          days[dayIndex],
+                          style: AppTextStyles.textH4,
+                        ),
+                        AppSizes.kWidth10,
+                        const Icon(Icons.expand_more),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Column _selectLocation(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          style: const ButtonStyle(
+              padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
+          onPressed: () {
+            Navigator.pushNamed(
+              context,
+              AppScreens.selectMapScreen,
+            );
+          },
+          child: const Text("Tap to Select location"),
+        ),
+        AppSizes.kHeight10,
+        Container(
+          height: 150,
+          width: double.infinity,
+          color: AppColors.lightgrey,
+          child: const GoogleMapWidget(),
+        ),
+      ],
     );
   }
 }
