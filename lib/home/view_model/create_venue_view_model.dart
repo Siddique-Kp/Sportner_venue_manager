@@ -88,12 +88,12 @@ class CreateVenueViewModel with ChangeNotifier {
 
   documentPicker(context) async {
     _venueDocument = await imagePicker(context);
-   _venueDocClodinary = cloudinaryImage(_venueDocument!);
+    _venueDocClodinary = cloudinaryImage(_venueDocument!);
   }
 
   venueImagePicker(context) async {
     _venueImage = await imagePicker(context);
-   _venueImageCloudinary = cloudinaryImage(_venueImage!);
+    _venueImageCloudinary = cloudinaryImage(_venueImage!);
   }
 
   Future<File?> imagePicker(context) async {
@@ -124,6 +124,17 @@ class CreateVenueViewModel with ChangeNotifier {
   }
 
   /// SET SELECTED TIME SLOT
+  
+    List<Map<String, dynamic>> allSlotsOfDay = [
+    Slot(day: "Sunday", slots: []).toJson(),
+    Slot(day: "Monday", slots: []).toJson(),
+    Slot(day: "Tuesday", slots: []).toJson(),
+    Slot(day: "Wednesday", slots: []).toJson(),
+    Slot(day: "Thursday", slots: []).toJson(),
+    Slot(day: "Friday", slots: []).toJson(),
+    Slot(day: "Saturday", slots: []).toJson()
+  ];
+  
   setSelectedTime(bool checkBoxValue, String days, int index) {
     dayCheckboxValues[days]?[index] = checkBoxValue;
     notifyListeners();
@@ -136,27 +147,21 @@ class CreateVenueViewModel with ChangeNotifier {
     int dayIndex,
   ) {
     if (!checkBoxValue) {
-      if (allSlotsOfDay[dayIndex].slots!.contains(selectedSlot)) {
-        allSlotsOfDay[dayIndex].slots!.remove(selectedSlot);
+      if ((allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
+          .contains(selectedSlot)) {
+        (allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
+            .remove(selectedSlot);
       }
     } else {
-      if (!allSlotsOfDay[dayIndex].slots!.contains(selectedSlot)) {
-        allSlotsOfDay[dayIndex].slots!.add(selectedSlot);
+      if (!(allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
+          .contains(selectedSlot)) {
+        (allSlotsOfDay[dayIndex]["slots"] as List<dynamic>).add(selectedSlot);
       }
     }
-    log(allSlotsOfDay[dayIndex].day.toString());
-    log(allSlotsOfDay[dayIndex].slots!.toString());
+    log(allSlotsOfDay[dayIndex].toString());
   }
 
-  List<Slot> allSlotsOfDay = [
-    Slot(day: "Sunday", slots: []),
-    Slot(day: "Monday", slots: []),
-    Slot(day: "Tuesday", slots: []),
-    Slot(day: "Wednesday", slots: []),
-    Slot(day: "Thursday", slots: []),
-    Slot(day: "Friday", slots: []),
-    Slot(day: "Saturday", slots: [])
-  ];
+
 
   // createVenueBody() {
   //   final createVenueBody = CreateVenueModel(
@@ -174,5 +179,7 @@ class CreateVenueViewModel with ChangeNotifier {
   //     lng: ,
   //     slots: allSlotsOfDay,
   //   );
+
+  //   return createVenueBody.toJson();
   // }
 }
