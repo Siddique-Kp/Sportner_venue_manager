@@ -19,7 +19,6 @@ class VendorTurfCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    log(vmVenueDataList.length.toString());
     return ListView.separated(
       shrinkWrap: true,
       physics: const ScrollPhysics(),

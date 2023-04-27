@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/components/shimmer_widget.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/home/view_model/google_map_view_model.dart';
 
 class GoogleMapWidget extends StatelessWidget {
@@ -12,6 +13,7 @@ class GoogleMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final googleMapViewModel = context.watch<GoogleMapViewModel>();
+    final createVenueViewModel = context.read<CreateVenueViewModel>();
     try {
       return googleMapViewModel.currentLocation == null
           ? ShimmerWidget.rectangle(width: double.infinity, height: height)
@@ -41,6 +43,7 @@ class GoogleMapWidget extends StatelessWidget {
               },
               onLongPress: (latlong) {
                 googleMapViewModel.addMarker(latlong, googleMapViewModel);
+                createVenueViewModel.getSelectedLocation(latlong);
               },
             );
     } catch (error, stackTrace) {

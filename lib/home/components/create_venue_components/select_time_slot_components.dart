@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
-
 import '../../../utils/global_colors.dart';
 import '../../view_model/create_venue_view_model.dart';
 

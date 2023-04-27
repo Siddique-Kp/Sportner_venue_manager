@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/model/create_venue_model.dart';
 import 'package:sportner_venue_manager/home/model/sports_data_model.dart';
@@ -14,44 +16,45 @@ import 'package:sportner_venue_manager/utils/keys.dart';
 import '../../vendor_registration/components/snackbar.dart';
 
 class CreateVenueViewModel with ChangeNotifier {
+  CreateVenueViewModel() {
+    getCurrentLocation();
+  }
+
   final venueNameCntrllr = TextEditingController();
   final venueMobileCntrllr = TextEditingController();
   final venueAddressCntrllr = TextEditingController();
   final venueDescriptionCntrllr = TextEditingController();
   final venuePriceCntrllr = TextEditingController();
   final venueDiscountCntrllr = TextEditingController();
-  final cloudinary = Cloudinary.signedConfig(
-    apiKey: "379449483728479",
-    apiSecret: "P84yD201T01-JblVWczdP-1GB_Q",
-    cloudName: "dkd1urq1v",
-  );
-  Map<String, List<bool>> dayCheckboxValues = {
-    'Sunday': List.filled(24, false),
-    'Monday': List.filled(24, false),
-    'Tuesday': List.filled(24, false),
-    'Wednesday': List.filled(24, false),
-    'Thursday': List.filled(24, false),
-    'Friday': List.filled(24, false),
-    'Saturday': List.filled(24, false),
-  };
+  String _districtName = 'Select District';
+  LocationData? currentLocation;
+  LatLng? selectedLocation;
 
   SportsDataModel? _sportsData;
   bool _isLoading = false;
   final List<bool> _checkBoxValue = List.filled(24, false);
   File? _venueDocument;
-  String? _venueDocClodinary;
+  String? venueDocClodinary;
   File? _venueImage;
-  String? _venueImageCloudinary;
+  String? venueImageCloudinary;
 
+  String get districtName => _districtName;
   SportsDataModel? get sportsData => _sportsData;
   bool get isLoading => _isLoading;
   List<bool> get checkBoxValue => _checkBoxValue;
   File? get venueDocument => _venueDocument;
   File? get venueImage => _venueImage;
 
-//---------- get sports data
+  getDistrict(String district) {
+    _districtName = district;
+    notifyListeners();
+  }
+
+  /// GET AVAILABLE SPORTS DATA FROM SERVER
+
   getAllSports() async {
     _setLoading(true);
+
     final accessToken = await getAccessToken();
 
     final response = await ApiServices.getMethod(
@@ -84,16 +87,22 @@ class CreateVenueViewModel with ChangeNotifier {
     return accessToken;
   }
 
-  // ---- Pick image from gallery
+  ///  PICK THE IMAGES OF TURF AND SEND TO CLODINARY
+
+  final cloudinary = Cloudinary.signedConfig(
+    apiKey: "379449483728479",
+    apiSecret: "P84yD201T01-JblVWczdP-1GB_Q",
+    cloudName: "dkd1urq1v",
+  );
 
   documentPicker(context) async {
     _venueDocument = await imagePicker(context);
-    _venueDocClodinary = cloudinaryImage(_venueDocument!);
+    venueDocClodinary = cloudinaryImage(_venueDocument!);
   }
 
   venueImagePicker(context) async {
     _venueImage = await imagePicker(context);
-    _venueImageCloudinary = cloudinaryImage(_venueImage!);
+    venueImageCloudinary = cloudinaryImage(_venueImage!);
   }
 
   Future<File?> imagePicker(context) async {
@@ -123,18 +132,44 @@ class CreateVenueViewModel with ChangeNotifier {
     }
   }
 
+  /// GET MAP LONGITUDE AND LATITUDE
+
+  getCurrentLocation() async {
+    Location location = Location();
+
+    await location.getLocation().then((location) {
+      currentLocation = location;
+      notifyListeners();
+    });
+  }
+
+  getSelectedLocation(LatLng? location) {
+    selectedLocation = location;
+    notifyListeners();
+  }
+
   /// SET SELECTED TIME SLOT
-  
-    List<Map<String, dynamic>> allSlotsOfDay = [
-    Slot(day: "Sunday", slots: []).toJson(),
-    Slot(day: "Monday", slots: []).toJson(),
-    Slot(day: "Tuesday", slots: []).toJson(),
-    Slot(day: "Wednesday", slots: []).toJson(),
-    Slot(day: "Thursday", slots: []).toJson(),
-    Slot(day: "Friday", slots: []).toJson(),
-    Slot(day: "Saturday", slots: []).toJson()
+
+  Map<String, List<bool>> dayCheckboxValues = {
+    'Sunday': List.filled(24, false),
+    'Monday': List.filled(24, false),
+    'Tuesday': List.filled(24, false),
+    'Wednesday': List.filled(24, false),
+    'Thursday': List.filled(24, false),
+    'Friday': List.filled(24, false),
+    'Saturday': List.filled(24, false),
+  };
+
+  List<Slot> allSlotsOfDay = [
+    Slot(day: "Sunday", slots: []),
+    Slot(day: "Monday", slots: []),
+    Slot(day: "Tuesday", slots: []),
+    Slot(day: "Wednesday", slots: []),
+    Slot(day: "Thursday", slots: []),
+    Slot(day: "Friday", slots: []),
+    Slot(day: "Saturday", slots: [])
   ];
-  
+
   setSelectedTime(bool checkBoxValue, String days, int index) {
     dayCheckboxValues[days]?[index] = checkBoxValue;
     notifyListeners();
@@ -147,36 +182,30 @@ class CreateVenueViewModel with ChangeNotifier {
     int dayIndex,
   ) {
     if (!checkBoxValue) {
-      if ((allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
-          .contains(selectedSlot)) {
-        (allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
-            .remove(selectedSlot);
+      if (allSlotsOfDay[dayIndex].slots!.contains(selectedSlot)) {
+        allSlotsOfDay[dayIndex].slots!.remove(selectedSlot);
       }
     } else {
-      if (!(allSlotsOfDay[dayIndex]["slots"] as List<dynamic>)
-          .contains(selectedSlot)) {
-        (allSlotsOfDay[dayIndex]["slots"] as List<dynamic>).add(selectedSlot);
+      if (!allSlotsOfDay[dayIndex].slots!.contains(selectedSlot)) {
+        allSlotsOfDay[dayIndex].slots!.add(selectedSlot);
       }
     }
-    log(allSlotsOfDay[dayIndex].toString());
   }
-
-
 
   // createVenueBody() {
   //   final createVenueBody = CreateVenueModel(
   //     venueName: venueNameCntrllr.text.trim(),
   //     mobile: int.parse(venueMobileCntrllr.text.trim()),
   //     place: venueAddressCntrllr.text.trim(),
-  //     district: ,
+  //     district: _districtName,
   //     description: venueDescriptionCntrllr.text.trim(),
   //     document: _venueDocClodinary,
   //     actualPrice: int.parse(venuePriceCntrllr.text.trim()),
   //     discountPercentage: int.parse(venueDiscountCntrllr.text.trim()),
   //     image: _venueImageCloudinary,
   //     sportFacility: ,
-  //     lat: ,
-  //     lng: ,
+  //     lat:_selectedLocation?.latitude ?? _currentLocation?.latitude,
+  //     lng: _selectedLocation?.longitude ?? _currentLocation?.longitude,
   //     slots: allSlotsOfDay,
   //   );
 

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
@@ -8,12 +10,12 @@ import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../components/create_venue_components/google_map_widget.dart';
 import '../components/create_venue_components/select_time_slot_components.dart';
 
-
 class CreateVenueThirdView extends StatelessWidget {
   const CreateVenueThirdView({super.key});
 
   @override
   Widget build(BuildContext context) {
+   final createVenueModel =  context.watch<CreateVenueViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add new venue"),
@@ -82,8 +84,8 @@ class CreateVenueThirdView extends StatelessWidget {
             final days = TimeSlotByDays.days;
             return InkWell(
               onTap: () {
-                TimeSlotByDays.timeSlotBottomSheet(context, days[dayIndex],dayIndex);
-                
+                TimeSlotByDays.timeSlotBottomSheet(
+                    context, days[dayIndex], dayIndex);
               },
               child: Container(
                 decoration: BoxDecoration(

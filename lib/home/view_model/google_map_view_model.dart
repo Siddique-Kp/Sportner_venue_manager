@@ -17,9 +17,10 @@ class GoogleMapViewModel with ChangeNotifier {
   GoogleMapController? get googleMapController => _googleMapController;
   Marker? get selectedMarker => _selectedMarker;
 
-  setSelectedMarker(Marker? selectedPosition) {
+  Marker? setSelectedMarker(Marker? selectedPosition) {
     _selectedMarker = selectedPosition;
     notifyListeners();
+    return _selectedMarker;
   }
 
   getControllervalue(GoogleMapController controller) {
