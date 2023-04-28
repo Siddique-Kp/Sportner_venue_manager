@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
+import '../../model/create_venue_model.dart';
 import '../../model/sports_data_model.dart';
 import '../venues_list_components/sports_icon.dart';
 
@@ -9,16 +14,18 @@ class SelectSportWidget extends StatelessWidget {
   const SelectSportWidget({
     super.key,
     required this.allSports,
+    required this.createVenueModel,
   });
 
   final SportsDataModel? allSports;
+  final CreateVenueViewModel createVenueModel;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Select sports"),
+        Text("Select sports", style: AppTextStyles.textH4),
         AppSizes.kHeight10,
         SizedBox(
           height: 50,
@@ -27,56 +34,88 @@ class SelectSportWidget extends StatelessWidget {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemCount: allSports!.response!.length,
-            itemBuilder: (context, index1) {
-              return InkWell(
+            separatorBuilder: (context, index) => AppSizes.kWidth5,
+            itemBuilder: (context, sportIndex) {
+              return GestureDetector(
                 onTap: () {
-                  _facilityBottomSheet(context, index1);
+                  final defaultFacility =
+                      allSports!.response![sportIndex].facilityDetails!.first;
+                  context
+                      .read<CreateVenueViewModel>()
+                      .setSelectSport(sportIndex, allSports,defaultFacility);
+
+                  if (createVenueModel.selectedSportIndex
+                      .contains(sportIndex)) {
+                    _facilityBottomSheet(context, sportIndex);
+                    createVenueModel.setDefaultFacility(defaultFacility);
+                  }
+                  log(createVenueModel.selectedFacility
+                      .map((e) => e.facility)
+                      .toString());
+                  log(createVenueModel.selectedFacility.length.toString());
                 },
                 child: Container(
                   width: 50,
                   decoration: BoxDecoration(
-                    color: AppColors.lightgrey,
+                    color:
+                        createVenueModel.selectedSportIndex.contains(sportIndex)
+                            ? AppColors.appColor
+                            : AppColors.lightgrey,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Center(
                     child: Icon(
-                      Sports.spots(sport: allSports!.response![index1].sport!),
+                      Sports.spots(
+                          sport: allSports!.response![sportIndex].sport!),
+                      color: createVenueModel.selectedSportIndex
+                              .contains(sportIndex)
+                          ? AppColors.white
+                          : AppColors.black,
                     ),
                   ),
                 ),
               );
             },
-            separatorBuilder: (context, index) => AppSizes.kWidth5,
           ),
         )
       ],
     );
   }
 
-  _facilityBottomSheet(context, int index1) {                                   
-    return showModalBottomSheet(                                                
+  _facilityBottomSheet(context, int sportIndex) {
+    List<FacilityDetail> facilities =
+        allSports!.response![sportIndex].facilityDetails!;
+    return showModalBottomSheet(
       context: context,
       builder: (context) {
         return Wrap(
-          direction: Axis.vertical,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Select facility",
-                style: AppTextStyles.textH5,
-              ),
-            ),
-            SizedBox(
-              height: 60,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: allSports!.response![index1].facilityDetails!.length,
-                itemBuilder: (BuildContext context, int index2) {
-                  return _radioButton(index1,index2, context);
-                },
-              ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Select facility",
+                    style: AppTextStyles.textH5,
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: facilities.length,
+                    itemBuilder: (BuildContext context, int facilityIndex) {
+                      return _radioButton(
+                        sportIndex,
+                        facilityIndex,
+                        context,
+                        facilities,
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -84,20 +123,29 @@ class SelectSportWidget extends StatelessWidget {
     );
   }
 
-  Widget _radioButton(int index1,int index2, BuildContext context) {
-    // final bookingSlotViewModel = context.watch<BookingSlotViewModel>();
-    final values = allSports!.response![index1].facilityDetails![index2];
+  Widget _radioButton(
+    int sportIndex,
+    int facilityIndex,
+    BuildContext context,
+    List<FacilityDetail> facilities,
+  ) {
+    final facility = facilities[facilityIndex];
+    final createVenueModel = context.watch<CreateVenueViewModel>();
+    final sports = allSports!.response![sportIndex];
+    for (SportFacility facility in createVenueModel.selectedFacility) {
+      log('${facility.sport} (${facility.facility})');
+    }
     return Row(
       children: [
         Radio(
-          value: values,
-          groupValue: null,
+          value: facility,
+          groupValue: createVenueModel.facility,
           activeColor: AppColors.appColor,
           onChanged: (value) {
-            // bookingSlotViewModel.setRadioButton(value.toString());
+            createVenueModel.setSelectedFacility(value!, sports.id!);
           },
         ),
-        Text(values.facility.toString())
+        Text(facility.facility.toString())
       ],
     );
   }

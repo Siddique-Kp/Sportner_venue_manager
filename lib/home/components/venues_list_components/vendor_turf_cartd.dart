@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:sportner_venue_manager/home/components/shimmer_widget.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
-
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';

@@ -42,7 +42,10 @@ class CreateVenueScndView extends StatelessWidget {
             AppSizes.kHeight20,
             const VenueImageWidget(),
             AppSizes.kHeight20,
-            SelectSportWidget(allSports: allSports),
+            SelectSportWidget(
+              allSports: allSports,
+              createVenueModel: createVenueViewModel,
+            ),
             AppSizes.kHeight30,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

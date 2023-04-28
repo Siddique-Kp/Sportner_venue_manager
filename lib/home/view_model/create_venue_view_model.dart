@@ -31,19 +31,27 @@ class CreateVenueViewModel with ChangeNotifier {
   LatLng? selectedLocation;
 
   SportsDataModel? _sportsData;
-  bool _isLoading = false;
+  bool _isLoadingSport = false;
   final List<bool> _checkBoxValue = List.filled(24, false);
   File? _venueDocument;
   String? venueDocClodinary;
   File? _venueImage;
   String? venueImageCloudinary;
+  final List<int> _selectedSportIndex = [];
+  final List<SportFacility> _selectedFacility = [];
+  FacilityDetail? _facility;
+  FacilityDetail? _defaultFacility;
 
   String get districtName => _districtName;
   SportsDataModel? get sportsData => _sportsData;
-  bool get isLoading => _isLoading;
+  bool get isLoadingSport => _isLoadingSport;
   List<bool> get checkBoxValue => _checkBoxValue;
   File? get venueDocument => _venueDocument;
   File? get venueImage => _venueImage;
+  List<int> get selectedSportIndex => _selectedSportIndex;
+  List<SportFacility> get selectedFacility => _selectedFacility;
+  FacilityDetail? get facility => _facility;
+  FacilityDetail? get defaultFacility => _defaultFacility;
 
   getDistrict(String district) {
     _districtName = district;
@@ -77,17 +85,54 @@ class CreateVenueViewModel with ChangeNotifier {
   }
 
   _setLoading(bool loading) {
-    _isLoading = loading;
+    _isLoadingSport = loading;
   }
 
   Future<String?> getAccessToken() async {
     final sharedPref = await SharedPreferences.getInstance();
     final accessToken = sharedPref.getString(GlobalKeys.accesToken);
-
     return accessToken;
   }
 
-  ///  PICK THE IMAGES OF TURF AND SEND TO CLODINARY
+  setSelectSport(int index, SportsDataModel? allSports, FacilityDetail defaultFacility) {
+    if (!_selectedSportIndex.contains(index)) {
+      _selectedSportIndex.add(index);
+      if (!_selectedFacility
+          .any((sf) => sf.sportId == allSports!.response![index].id)) {
+        _selectedFacility.add(SportFacility(
+          sport: allSports!.response![index].sport,
+          sportId: allSports.response![index].id,
+          facility: defaultFacility.facility
+        ));
+      }
+    } else {
+      _selectedSportIndex.remove(index);
+      final facilityToRemove = _selectedFacility.firstWhere(
+        (sf) => sf.sportId == allSports!.response![index].id,
+      );
+
+      _selectedFacility.remove(facilityToRemove);
+    }
+    notifyListeners();
+  }
+
+  setDefaultFacility(FacilityDetail defaultFacility) {
+    _facility = defaultFacility;
+    notifyListeners();
+  }
+
+  setSelectedFacility(FacilityDetail facility, String sportId) {
+    _facility = facility;
+    if (_selectedFacility.any((sf) => sf.sportId == sportId)) {
+      final index =
+          _selectedFacility.indexWhere((sportF) => sportF.sportId == sportId);
+      _selectedFacility[index].facility = facility.facility;
+    }
+    notifyListeners();
+  }
+
+
+  ///  PICK THE IMAGES OF TURF AND SEND TO CLOUDINARY
 
   final cloudinary = Cloudinary.signedConfig(
     apiKey: "379449483728479",
@@ -97,12 +142,16 @@ class CreateVenueViewModel with ChangeNotifier {
 
   documentPicker(context) async {
     _venueDocument = await imagePicker(context);
-    venueDocClodinary = cloudinaryImage(_venueDocument!);
+    if (_venueDocument != null) {
+      venueDocClodinary = cloudinaryImage(_venueDocument!);
+    }
   }
 
   venueImagePicker(context) async {
     _venueImage = await imagePicker(context);
-    venueImageCloudinary = cloudinaryImage(_venueImage!);
+    if (_venueImage != null) {
+      venueImageCloudinary = cloudinaryImage(_venueImage!);
+    }
   }
 
   Future<File?> imagePicker(context) async {
@@ -192,23 +241,32 @@ class CreateVenueViewModel with ChangeNotifier {
     }
   }
 
-  // createVenueBody() {
-  //   final createVenueBody = CreateVenueModel(
-  //     venueName: venueNameCntrllr.text.trim(),
-  //     mobile: int.parse(venueMobileCntrllr.text.trim()),
-  //     place: venueAddressCntrllr.text.trim(),
-  //     district: _districtName,
-  //     description: venueDescriptionCntrllr.text.trim(),
-  //     document: _venueDocClodinary,
-  //     actualPrice: int.parse(venuePriceCntrllr.text.trim()),
-  //     discountPercentage: int.parse(venueDiscountCntrllr.text.trim()),
-  //     image: _venueImageCloudinary,
-  //     sportFacility: ,
-  //     lat:_selectedLocation?.latitude ?? _currentLocation?.latitude,
-  //     lng: _selectedLocation?.longitude ?? _currentLocation?.longitude,
-  //     slots: allSlotsOfDay,
-  //   );
 
-  //   return createVenueBody.toJson();
-  // }
+  /// PASSING ALL THE DATA TO THE SERVER
+
+  createVenueBody() {
+    final createVenueBody = CreateVenueModel(
+      venueName: venueNameCntrllr.text.trim(),
+      mobile: int.parse(venueMobileCntrllr.text.trim()),
+      place: venueAddressCntrllr.text.trim(),
+      district: _districtName,
+      description: venueDescriptionCntrllr.text.trim(),
+      document: venueDocClodinary,
+      actualPrice: int.parse(venuePriceCntrllr.text.trim()),
+      discountPercentage: int.parse(venueDiscountCntrllr.text.trim()),
+      image: venueImageCloudinary,
+      sportFacility:_selectedFacility ,
+      lat:selectedLocation?.latitude ?? currentLocation?.latitude,
+      lng: selectedLocation?.longitude ?? currentLocation?.longitude,
+      slots: allSlotsOfDay,
+    );
+
+    return createVenueBody.toJson();
+  }
+
+
+
+  createVenueApiService(){
+    
+  }
 }

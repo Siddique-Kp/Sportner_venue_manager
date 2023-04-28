@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../utils/textstyles.dart';
 import 'venue_text_field.dart';
 
 class DiscountAndAmountField extends StatelessWidget {
@@ -18,7 +19,7 @@ class DiscountAndAmountField extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title),
+        Text(title,style: AppTextStyles.textH4),
         SizedBox(
           height: 50,
           width: 150,

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
+import '../../../utils/textstyles.dart';
 import '../../view_model/create_venue_view_model.dart';
 
 class DocumentImagePicker extends StatelessWidget {
@@ -17,7 +18,7 @@ class DocumentImagePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Document"),
+         Text("Document",style: AppTextStyles.textH4),
         AppSizes.kHeight10,
         InkWell(
           onTap: ()async {
