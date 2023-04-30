@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 
@@ -21,7 +22,6 @@ class VenueTextFldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -29,9 +29,7 @@ class VenueTextFldWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: AppColors.black,
-            ),
+            style: AppTextStyles.textH4,
           ),
           AppSizes.kHeight5,
           VenueTextField(

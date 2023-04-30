@@ -4,114 +4,127 @@
 
 import 'dart:convert';
 
-CreateVenueModel createVenueModelFromJson(String str) => CreateVenueModel.fromJson(json.decode(str));
+CreateVenueModel createVenueModelFromJson(Map<String,dynamic> str) => CreateVenueModel.fromJson(str);
 
 String createVenueModelToJson(CreateVenueModel data) => json.encode(data.toJson());
 
 class CreateVenueModel {
-    CreateVenueModel({
-        this.venueName,
-        this.mobile,
-        this.district,
-        this.place,
-        this.actualPrice,
-        this.discountPercentage,
-        this.description,
-        this.image,
-        this.document,
-        this.slots,
-        this.sportFacility,
-        this.lat,
-        this.lng,
-    });
+  String? venueName;
+  String? mobile;
+  String? district;
+  String? place;
+  String? actualPrice;
+  String? discountPercentage;
+  String? description;
+  String? image;
+  String? document;
+  List<Slots>? slots;
+  List<SportFacility>? sportFacility;
+  String? lat;
+  String? lng;
 
-    String? venueName;
-    int? mobile;
-    String? district;
-    String? place;
-    int? actualPrice;
-    int? discountPercentage;
-    String? description;
-    String? image;
-    String? document;
-    List<Slot>? slots;
-    List<SportFacility>? sportFacility;
-    double? lat;
-    double? lng;
+  CreateVenueModel(
+      {this.venueName,
+      this.mobile,
+      this.district,
+      this.place,
+      this.actualPrice,
+      this.discountPercentage,
+      this.description,
+      this.image,
+      this.document,
+      this.slots,
+      this.sportFacility,
+      this.lat,
+      this.lng});
 
-    factory CreateVenueModel.fromJson(Map<String, dynamic> json) => CreateVenueModel(
-        venueName: json["venueName"],
-        mobile: json["mobile"],
-        district: json["district"],
-        place: json["place"],
-        actualPrice: json["actualPrice"],
-        discountPercentage: json["discountPercentage"],
-        description: json["description"],
-        image: json["image"],
-        document: json["document"],
-        slots: json["slots"] == null ? [] : List<Slot>.from(json["slots"]!.map((x) => Slot.fromJson(x))),
-        sportFacility: json["sportFacility"] == null ? [] : List<SportFacility>.from(json["sportFacility"]!.map((x) => SportFacility.fromJson(x))),
-        lat: json["lat"]?.toDouble(),
-        lng: json["lng"]?.toDouble(),
-    );
+  CreateVenueModel.fromJson(Map<String, dynamic> json) {
+    venueName = json['venueName'];
+    mobile = json['mobile'];
+    district = json['district'];
+    place = json['place'];
+    actualPrice = json['actualPrice'];
+    discountPercentage = json['discountPercentage'];
+    description = json['description'];
+    image = json['image'];
+    document = json['document'];
+    if (json['slots'] != null) {
+      slots = <Slots>[];
+      json['slots'].forEach((v) {
+        slots!.add( Slots.fromJson(v));
+      });
+    }
+    if (json['sportFacility'] != null) {
+      sportFacility = <SportFacility>[];
+      json['sportFacility'].forEach((v) {
+        sportFacility!.add( SportFacility.fromJson(v));
+      });
+    }
+    lat = json['lat'];
+    lng = json['lng'];
+  }
 
-    Map<String, dynamic> toJson() => {
-        "venueName": venueName,
-        "mobile": mobile,
-        "district": district,
-        "place": place,
-        "actualPrice": actualPrice,
-        "discountPercentage": discountPercentage,
-        "description": description,
-        "image": image,
-        "document": document,
-        "slots": slots == null ? [] : List<dynamic>.from(slots!.map((x) => x.toJson())),
-        "sportFacility": sportFacility == null ? [] : List<dynamic>.from(sportFacility!.map((x) => x.toJson())),
-        "lat": lat,
-        "lng": lng,
-    };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['venueName'] =venueName;
+    data['mobile'] =mobile;
+    data['district'] =district;
+    data['place'] =place;
+    data['actualPrice'] =actualPrice;
+    data['discountPercentage'] =discountPercentage;
+    data['description'] =description;
+    data['image'] =image;
+    data['document'] =document;
+    if (slots != null) {
+      data['slots'] =slots!.map((v) => v.toJson()).toList();
+    }
+    if (sportFacility != null) {
+      data['sportFacility'] =
+         sportFacility!.map((v) => v.toJson()).toList();
+    }
+    data['lat'] =lat;
+    data['lng'] =lng;
+    return data;
+  }
 }
 
-class Slot {
-    Slot({
-        this.day,
-        this.slots,
-    });
+class Slots {
+  String? day;
+  List<String>? slots;
 
-    String? day;
-    List<String>? slots;
+  Slots({this.day, this.slots});
 
-    factory Slot.fromJson(Map<String, dynamic> json) => Slot(
-        day: json["day"],
-        slots: json["slots"] == null ? [] : List<String>.from(json["slots"]!.map((x) => x)),
-    );
+  Slots.fromJson(Map<String, dynamic> json) {
+    day = json['day'];
+    slots = json['slots'].cast<String>();
+  }
 
-    Map<String, dynamic> toJson() => {
-        "day": day,
-        "slots": slots == null ? [] : List<dynamic>.from(slots!.map((x) => x)),
-    };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data =  {};
+    data['day'] = day;
+    data['slots'] = slots;
+    return data;
+  }
 }
 
 class SportFacility {
-    SportFacility({
-        this.sportId,
-        this.sport,
-        this.facility,
-    });
+  String? sportId;
+  String? sport;
+  String? facility;
 
-    String? sportId;
-    String? sport;
-    String? facility;
+  SportFacility({this.sportId, this.sport, this.facility});
 
-    factory SportFacility.fromJson(Map<String, dynamic> json) => SportFacility(
-        sportId: json["sportId"],
-        sport: json["sport"],
-        facility: json["facility"],
-    );
+  SportFacility.fromJson(Map<String, dynamic> json) {
+    sportId = json['sportId'];
+    sport = json['sport'];
+    facility = json['facility'];
+  }
 
-    Map<String, dynamic> toJson() => {
-        "sportId": sportId,
-        "sport": sport,
-        "facility": facility,
-    };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['sportId'] = sportId;
+    data['sport'] = sport;
+    data['facility'] = facility;
+    return data;
+  }
 }

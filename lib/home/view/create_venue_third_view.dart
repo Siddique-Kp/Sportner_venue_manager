@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
@@ -13,7 +14,7 @@ class CreateVenueThirdView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final createVenueModel =  context.watch<CreateVenueViewModel>();
+    final createVenueModel = context.watch<CreateVenueViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add new venue"),
@@ -33,14 +34,14 @@ class CreateVenueThirdView extends StatelessWidget {
                 _selecTimeSlot(),
               ],
             ),
-            _submitbutton(),
+            _submitbutton(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _submitbutton() {
+  Widget _submitbutton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 50),
       child: Row(
@@ -51,7 +52,9 @@ class CreateVenueThirdView extends StatelessWidget {
             width: 100,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(elevation: 0),
-              onPressed: () {},
+              onPressed: () {
+                context.read<CreateVenueViewModel>().createVenueApiService();
+              },
               child: const Text("SUBMIT"),
             ),
           )

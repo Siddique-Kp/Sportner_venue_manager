@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../../../utils/districts.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
@@ -18,7 +18,7 @@ class DistrictPickerField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppSizes.kHeight5,
-        const Text("District"),
+         Text("District",style: AppTextStyles.textH4),
         AppSizes.kHeight5,
         DropdownButtonFormField<String>(
           borderRadius: BorderRadius.circular(5),

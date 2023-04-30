@@ -48,9 +48,9 @@ class LoginViewModel with ChangeNotifier {
     final navigator = Navigator.of(context);
     setLoading(true);
     final response = await ApiServices.postMethod(
-      Urls.kVENDORSIGNIN,
-      vendorDataBody(),
-      vendorLoginModelFromJson,
+      url: Urls.kVENDORSIGNIN,
+      body: vendorDataBody(),
+      function: vendorLoginModelFromJson,
     );
 
     if (response is Success) {

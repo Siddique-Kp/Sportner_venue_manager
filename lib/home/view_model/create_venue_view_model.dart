@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloudinary/cloudinary.dart';
@@ -32,6 +33,7 @@ class CreateVenueViewModel with ChangeNotifier {
 
   SportsDataModel? _sportsData;
   bool _isLoadingSport = false;
+  bool _isLoading = false;
   final List<bool> _checkBoxValue = List.filled(24, false);
   File? _venueDocument;
   String? venueDocClodinary;
@@ -45,6 +47,7 @@ class CreateVenueViewModel with ChangeNotifier {
   String get districtName => _districtName;
   SportsDataModel? get sportsData => _sportsData;
   bool get isLoadingSport => _isLoadingSport;
+  bool get isLoading => _isLoading;
   List<bool> get checkBoxValue => _checkBoxValue;
   File? get venueDocument => _venueDocument;
   File? get venueImage => _venueImage;
@@ -94,16 +97,16 @@ class CreateVenueViewModel with ChangeNotifier {
     return accessToken;
   }
 
-  setSelectSport(int index, SportsDataModel? allSports, FacilityDetail defaultFacility) {
+  setSelectSport(
+      int index, SportsDataModel? allSports, FacilityDetail defaultFacility) {
     if (!_selectedSportIndex.contains(index)) {
       _selectedSportIndex.add(index);
       if (!_selectedFacility
           .any((sf) => sf.sportId == allSports!.response![index].id)) {
         _selectedFacility.add(SportFacility(
-          sport: allSports!.response![index].sport,
-          sportId: allSports.response![index].id,
-          facility: defaultFacility.facility
-        ));
+            sport: allSports!.response![index].sport,
+            sportId: allSports.response![index].id,
+            facility: defaultFacility.facility));
       }
     } else {
       _selectedSportIndex.remove(index);
@@ -131,7 +134,6 @@ class CreateVenueViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-
   ///  PICK THE IMAGES OF TURF AND SEND TO CLOUDINARY
 
   final cloudinary = Cloudinary.signedConfig(
@@ -143,14 +145,14 @@ class CreateVenueViewModel with ChangeNotifier {
   documentPicker(context) async {
     _venueDocument = await imagePicker(context);
     if (_venueDocument != null) {
-      venueDocClodinary = cloudinaryImage(_venueDocument!);
+      venueDocClodinary = await cloudinaryImage(_venueDocument!);
     }
   }
 
   venueImagePicker(context) async {
     _venueImage = await imagePicker(context);
     if (_venueImage != null) {
-      venueImageCloudinary = cloudinaryImage(_venueImage!);
+      venueImageCloudinary = await cloudinaryImage(_venueImage!);
     }
   }
 
@@ -170,7 +172,7 @@ class CreateVenueViewModel with ChangeNotifier {
     }
   }
 
-  cloudinaryImage(File file) async {
+  Future<String?> cloudinaryImage(File file) async {
     final response = await cloudinary.upload(
       file: file.path,
       fileBytes: file.readAsBytesSync(),
@@ -179,6 +181,7 @@ class CreateVenueViewModel with ChangeNotifier {
     if (response.isSuccessful) {
       return response.secureUrl;
     }
+    return null;
   }
 
   /// GET MAP LONGITUDE AND LATITUDE
@@ -209,14 +212,14 @@ class CreateVenueViewModel with ChangeNotifier {
     'Saturday': List.filled(24, false),
   };
 
-  List<Slot> allSlotsOfDay = [
-    Slot(day: "Sunday", slots: []),
-    Slot(day: "Monday", slots: []),
-    Slot(day: "Tuesday", slots: []),
-    Slot(day: "Wednesday", slots: []),
-    Slot(day: "Thursday", slots: []),
-    Slot(day: "Friday", slots: []),
-    Slot(day: "Saturday", slots: [])
+  List<Slots> allSlotsOfDay = [
+    Slots(day: "Sunday", slots: []),
+    Slots(day: "Monday", slots: []),
+    Slots(day: "Tuesday", slots: []),
+    Slots(day: "Wednesday", slots: []),
+    Slots(day: "Thursday", slots: []),
+    Slots(day: "Friday", slots: []),
+    Slots(day: "Saturday", slots: [])
   ];
 
   setSelectedTime(bool checkBoxValue, String days, int index) {
@@ -241,32 +244,79 @@ class CreateVenueViewModel with ChangeNotifier {
     }
   }
 
-
   /// PASSING ALL THE DATA TO THE SERVER
 
   createVenueBody() {
     final createVenueBody = CreateVenueModel(
       venueName: venueNameCntrllr.text.trim(),
-      mobile: int.parse(venueMobileCntrllr.text.trim()),
+      mobile: venueMobileCntrllr.text.trim(),
       place: venueAddressCntrllr.text.trim(),
       district: _districtName,
       description: venueDescriptionCntrllr.text.trim(),
       document: venueDocClodinary,
-      actualPrice: int.parse(venuePriceCntrllr.text.trim()),
-      discountPercentage: int.parse(venueDiscountCntrllr.text.trim()),
+      actualPrice: venuePriceCntrllr.text.trim(),
+      discountPercentage: venueDiscountCntrllr.text.trim(),
       image: venueImageCloudinary,
-      sportFacility:_selectedFacility ,
-      lat:selectedLocation?.latitude ?? currentLocation?.latitude,
-      lng: selectedLocation?.longitude ?? currentLocation?.longitude,
+      sportFacility: _selectedFacility,
+      lat: selectedLocation?.latitude.toString() ??
+          currentLocation?.latitude.toString(),
+      lng: selectedLocation?.longitude.toString() ??
+          currentLocation?.longitude.toString(),
       slots: allSlotsOfDay,
     );
-
     return createVenueBody.toJson();
   }
 
+  createVenueApiService() async {
+    setLoading(true);
 
+    final accessToken = await getAccessToken();
 
-  createVenueApiService(){
-    
+    final response = await ApiServices.dioPostMethod(
+      url: Urls.kCreateVenue,
+      body: createVenueBody(),
+      headers: accessToken!,
+    );
+
+    if (response is Success) {
+      log("Create Venue Success");
+      setLoading(false);
+    }
+
+    if (response is Failure) {
+      log("Create venue failed");
+      setLoading(false);
+    }
+  }
+
+  setLoading(bool loading) {
+    _isLoading = loading;
+  }
+
+  /// CHECK ALL FIELD VALIDATION
+
+  bool createVenueFirstValidate() {
+    if (venueNameCntrllr.text.isEmpty ||
+        venueMobileCntrllr.text.isEmpty ||
+        venueMobileCntrllr.text.length != 10 ||
+        venueAddressCntrllr.text.isEmpty ||
+        districtName == "Select District" ||
+        venueDescriptionCntrllr.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool createVenueSecondValidate() {
+    if (venueDocument == null ||
+        venuePriceCntrllr.text.isEmpty ||
+        venueDiscountCntrllr.text.isEmpty ||
+        venueImage == null ||
+        selectedFacility.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

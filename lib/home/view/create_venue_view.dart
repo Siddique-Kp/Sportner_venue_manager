@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
+import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import '../components/create_venue_components/district_picker_field.dart';
@@ -67,20 +68,25 @@ class CreateVenueView extends StatelessWidget {
                         height: 40,
                         width: 100,
                         child: ElevatedButton(
-                          onPressed: () async {
-                            await context
-                                .read<CreateVenueViewModel>()
-                                .getAllSports();
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushNamed(
-                                context, AppScreens.createVenueScndScreen);
-                                
-                            // if (_firstKey.currentState!.validate()) {
-                            //   log("form");
-                            // }
-                          },
-                          style: ElevatedButton.styleFrom(elevation: 0),
-                          child: const Text("Next"),
+                          onPressed: createVenueViewModelRead
+                                  .createVenueFirstValidate()
+                              ? () async {
+                                  await context
+                                      .read<CreateVenueViewModel>()
+                                      .getAllSports();
+
+                                  if (_firstKey.currentState!.validate()) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushNamed(context,
+                                        AppScreens.createVenueScndScreen);
+                                  }
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            disabledBackgroundColor: AppColors.lightgrey,
+                          ),
+                          child: const Text("NEXT"),
                         ),
                       ),
                     ],
