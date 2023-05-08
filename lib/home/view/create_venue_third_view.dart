@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
@@ -15,7 +14,7 @@ class CreateVenueThirdView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final createVenueViewModel = context.watch<CreateVenueViewModel>();
+    final createVenueViewModel = context.watch<CreateVenueViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add new venue"),
@@ -24,27 +23,28 @@ class CreateVenueThirdView extends StatelessWidget {
       body: createVenueViewModel.errorData?.code == 404
           ? const NoInternetWidget()
           : Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppSizes.kHeight20,
-                _selectLocation(context),
-                AppSizes.kHeight30,
-                _selecTimeSlot(),
-              ],
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppSizes.kHeight20,
+                      _selectLocation(context),
+                      AppSizes.kHeight30,
+                      _selecTimeSlot(),
+                    ],
+                  ),
+                  _submitbutton(context),
+                ],
+              ),
             ),
-            _submitbutton(context),
-          ],
-        ),
-      ),
     );
   }
 
   Widget _submitbutton(BuildContext context) {
+    final createVenueViewModel = context.watch<CreateVenueViewModel>();
     return Padding(
       padding: const EdgeInsets.only(bottom: 50),
       child: Row(
@@ -54,11 +54,23 @@ class CreateVenueThirdView extends StatelessWidget {
             height: 40,
             width: 100,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(elevation: 0),
-              onPressed: () {
-                context.read<CreateVenueViewModel>().createVenueApiService();
-              },
-              child: const Text("SUBMIT"),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                disabledBackgroundColor: AppColors.lightgrey,
+              ),
+              onPressed: createVenueViewModel.createVenueThirdValidate()
+                  ? () {
+                      context
+                          .read<CreateVenueViewModel>()
+                          .createVenueApiService(context);
+                    }
+                  : null,
+              child: createVenueViewModel.isLoading
+                  ? const CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.white,
+                    )
+                  : const Text("SUBMIT"),
             ),
           )
         ],

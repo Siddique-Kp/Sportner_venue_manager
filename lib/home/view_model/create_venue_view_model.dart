@@ -7,12 +7,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/model/create_venue_model.dart';
 import 'package:sportner_venue_manager/home/model/sports_data_model.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
 import 'package:sportner_venue_manager/utils/keys.dart';
+import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import '../../vendor_registration/components/snackbar.dart';
 
 class CreateVenueViewModel with ChangeNotifier {
@@ -274,11 +276,9 @@ class CreateVenueViewModel with ChangeNotifier {
     return createVenueBody.toJson();
   }
 
-  createVenueApiService() async {
+  createVenueApiService(BuildContext context) async {
     setLoading(true);
-
     final accessToken = await getAccessToken();
-
     final response = await ApiServices.dioPostMethod(
       url: Urls.kCreateVenue,
       body: createVenueBody(),
@@ -286,18 +286,32 @@ class CreateVenueViewModel with ChangeNotifier {
     );
 
     if (response is Success) {
-      log("Create Venue Success");
+      await Future.delayed(const Duration(seconds: 2));
+      createVenueSuccess(context);
       setLoading(false);
     }
 
     if (response is Failure) {
       log("Create venue failed");
+
       setLoading(false);
     }
   }
 
   setLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
+  }
+
+  createVenueSuccess(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, AppScreens.mainScreen, (route) => false);
+
+    GlassSnackBar.snackBar(
+      context: context,
+      title: "Create New Turf!",
+      subtitle: "New turf created successfully!",
+    );
   }
 
   /// CHECK ALL FIELD VALIDATION
@@ -325,5 +339,23 @@ class CreateVenueViewModel with ChangeNotifier {
     } else {
       return true;
     }
+  }
+
+  bool createVenueThirdValidate() {
+    bool anyValueIsTrue = false;
+    dayCheckboxValues.forEach((key, value) {
+      if (value.any((element) => element == true)) {
+        anyValueIsTrue = true;
+      }
+    });
+    if (anyValueIsTrue) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  notifyUi() {
+    notifyListeners();
   }
 }

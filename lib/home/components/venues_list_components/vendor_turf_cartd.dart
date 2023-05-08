@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
@@ -47,7 +48,7 @@ class VendorTurfCard extends StatelessWidget {
               ),
               _venueSportsFacility(size, index),
               _deleteButton(),
-              _editButton(),
+              _editButton(context),
             ],
           ),
         );
@@ -55,15 +56,23 @@ class VendorTurfCard extends StatelessWidget {
     );
   }
 
-  Positioned _editButton() {
-    return const Positioned(
+  Positioned _editButton(BuildContext context) {
+    return Positioned(
       bottom: 0,
       right: 65,
-      child: CircleAvatar(
-        backgroundColor: Color.fromARGB(255, 225, 225, 225),
-        child: Icon(
-          Icons.edit,
-          color: AppColors.black,
+      child: InkWell(
+        onTap: () {
+          // GlassSnackBar.snackBar(
+          //     context: context,
+          //     title: "Created Succsess!",
+          //     subtitle: "Venue Created Succsess!");
+        },
+        child: const CircleAvatar(
+          backgroundColor: Color.fromARGB(255, 225, 225, 225),
+          child: Icon(
+            Icons.edit,
+            color: AppColors.black,
+          ),
         ),
       ),
     );
@@ -95,7 +104,6 @@ class VendorTurfCard extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           separatorBuilder: (context, index) => AppSizes.kWidth5,
           itemBuilder: (context, sportindex) {
-           
             return CircleAvatar(
               radius: 21,
               backgroundColor: const Color.fromARGB(99, 158, 158, 158),
@@ -103,7 +111,9 @@ class VendorTurfCard extends StatelessWidget {
                 backgroundColor: AppColors.white,
                 child: Icon(
                   Sports.spots(
-                    sport: vmVenueDataList[venueindex].sportFacility![sportindex].sport!,
+                    sport: vmVenueDataList[venueindex]
+                        .sportFacility![sportindex]
+                        .sport!,
                   ),
                   color: AppColors.black,
                 ),

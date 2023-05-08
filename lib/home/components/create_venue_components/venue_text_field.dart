@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
@@ -67,6 +69,9 @@ class VenueTextField extends StatelessWidget {
       controller: controller,
       maxLines: isDescription ? 5 : 1,
       keyboardType: keyboardType,
+      onChanged: (value) {
+        context.read<CreateVenueViewModel>().notifyUi();
+      },
       validator: (value) {
         if (isMobile) {
           if (value == null || value.isEmpty) {

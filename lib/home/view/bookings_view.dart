@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/components/error_data_widget.dart';
+import 'package:sportner_venue_manager/home/components/normal_alert_box.dart';
 import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
 import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
@@ -28,8 +29,16 @@ class BookingsScreenView extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              context.read<FirebaseAuthViewModel>().vendorLoginStatus(context);
+              NormalAlertBox.alertBox(
+                context: context,
+                title: "Log out!",
+                content: "Do you want to logout",
+                onPressed: () {
+                       context.read<FirebaseAuthViewModel>().vendorLoginStatus(context);
               context.read<BottomNavViewModel>().changeBottomNavindex(0);
+                },
+              );
+         
             },
             icon: const Icon(Icons.logout),
           )
