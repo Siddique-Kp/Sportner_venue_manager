@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloudinary/cloudinary.dart';
@@ -43,6 +42,7 @@ class CreateVenueViewModel with ChangeNotifier {
   final List<SportFacility> _selectedFacility = [];
   FacilityDetail? _facility;
   FacilityDetail? _defaultFacility;
+  Failure? _errorData;
 
   String get districtName => _districtName;
   SportsDataModel? get sportsData => _sportsData;
@@ -55,6 +55,7 @@ class CreateVenueViewModel with ChangeNotifier {
   List<SportFacility> get selectedFacility => _selectedFacility;
   FacilityDetail? get facility => _facility;
   FacilityDetail? get defaultFacility => _defaultFacility;
+  Failure? get errorData => _errorData;
 
   getDistrict(String district) {
     _districtName = district;
@@ -79,11 +80,17 @@ class CreateVenueViewModel with ChangeNotifier {
     }
     if (response is Failure) {
       log("FAiled");
+      setErrorData(response);
     }
   }
 
   setAllSports(SportsDataModel allSports) {
     _sportsData = allSports;
+    notifyListeners();
+  }
+
+  setErrorData(Failure error) {
+    _errorData = error;
     notifyListeners();
   }
 

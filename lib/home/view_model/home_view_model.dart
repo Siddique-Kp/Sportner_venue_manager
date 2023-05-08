@@ -7,14 +7,18 @@ import 'package:sportner_venue_manager/utils/keys.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 
+
 class HomeViewModel with ChangeNotifier {
   HomeViewModel() {
     getVmVenueDatas();
   }
   List<VmVenueDataModel> _vmVenueDataList = [];
+  Failure? _errorResponseModel;
   bool _isLoading = false;
 
   List<VmVenueDataModel> get vmVenueDataList => _vmVenueDataList;
+  Failure? get errorResponseModel =>_errorResponseModel;
+
   bool get isLoading => _isLoading;
 
   getVmVenueDatas() async {
@@ -37,6 +41,7 @@ class HomeViewModel with ChangeNotifier {
 
     if (response is Failure) {
       log("failed");
+      setErrorResponse(response);
       setLoading(false);
     }
   }
@@ -48,6 +53,11 @@ class HomeViewModel with ChangeNotifier {
 
   setLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
+  }
+
+  setErrorResponse(Failure error) {
+    _errorResponseModel = error;
     notifyListeners();
   }
 

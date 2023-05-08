@@ -8,19 +8,22 @@ import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../components/create_venue_components/google_map_widget.dart';
 import '../components/create_venue_components/select_time_slot_components.dart';
+import '../components/error_data_widget.dart';
 
 class CreateVenueThirdView extends StatelessWidget {
   const CreateVenueThirdView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final createVenueModel = context.watch<CreateVenueViewModel>();
+     final createVenueViewModel = context.watch<CreateVenueViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add new venue"),
         centerTitle: true,
       ),
-      body: Padding(
+      body: createVenueViewModel.errorData?.code == 404
+          ? const NoInternetWidget()
+          : Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -12,7 +12,7 @@ class Urls {
 
 class InvalidRespons {
   static const kVENDORINVALIDRESPONSE = 100;
-  static const kNOINTERNET = 101;
+  static const kNOINTERNET = 404;
   static const kINVALIDFORMAT = 102;
   static const kUNKNOWNERROR = 103;
   static const kTIMEOUT = 104;

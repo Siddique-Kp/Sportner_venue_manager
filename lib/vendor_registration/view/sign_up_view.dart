@@ -33,7 +33,6 @@ class _VendorSignUpScreenState extends State<VendorSignUpScreen> {
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(
     //    const SystemUiOverlayStyle(statusBarColor: MyColors.appMainGreenColor));
-    final size = MediaQuery.of(context).size;
     final signUpProvider = context.watch<SignUpViewModel>();
     TextEditingController userNameController =
         signUpProvider.userNameController;

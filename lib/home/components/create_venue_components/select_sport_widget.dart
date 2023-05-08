@@ -22,7 +22,8 @@ class SelectSportWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return
+     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Select sports", style: AppTextStyles.textH4),
@@ -38,7 +39,7 @@ class SelectSportWidget extends StatelessWidget {
             itemBuilder: (context, sportIndex) {
               return GestureDetector(
                 onTap: () {
-                  final defaultFacility =
+                  final defaultFacility = 
                       allSports!.response![sportIndex].facilityDetails!.first;
                   context
                       .read<CreateVenueViewModel>()

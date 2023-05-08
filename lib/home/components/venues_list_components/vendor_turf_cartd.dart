@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import '../../../utils/global_colors.dart';
@@ -21,6 +23,7 @@ class VendorTurfCard extends StatelessWidget {
       itemCount: vmVenueDataList.length,
       separatorBuilder: (context, index) => AppSizes.kHeight20,
       itemBuilder: (context, index) {
+        log(vmVenueDataList.length.toString());
         return SizedBox(
           height: size.height * 0.32,
           child: Stack(
@@ -80,18 +83,19 @@ class VendorTurfCard extends StatelessWidget {
     );
   }
 
-  Positioned _venueSportsFacility(Size size, int index) {
+  Positioned _venueSportsFacility(Size size, int venueindex) {
     return Positioned(
       bottom: 0,
       left: size.width * 0.075,
       child: SizedBox(
         height: 45,
         child: ListView.separated(
-          itemCount: vmVenueDataList[index].sportFacility!.length,
+          itemCount: vmVenueDataList[venueindex].sportFacility!.length,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           separatorBuilder: (context, index) => AppSizes.kWidth5,
-          itemBuilder: (context, index) {
+          itemBuilder: (context, sportindex) {
+           
             return CircleAvatar(
               radius: 21,
               backgroundColor: const Color.fromARGB(99, 158, 158, 158),
@@ -99,7 +103,7 @@ class VendorTurfCard extends StatelessWidget {
                 backgroundColor: AppColors.white,
                 child: Icon(
                   Sports.spots(
-                    sport: vmVenueDataList[index].sportFacility![index].sport!,
+                    sport: vmVenueDataList[venueindex].sportFacility![sportindex].sport!,
                   ),
                   color: AppColors.black,
                 ),

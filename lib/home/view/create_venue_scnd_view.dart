@@ -8,6 +8,7 @@ import '../components/create_venue_components/discount_and_amount_field.dart';
 import '../components/create_venue_components/document_image_picker.dart';
 import '../components/create_venue_components/select_sport_widget.dart';
 import '../components/create_venue_components/venue_image_picker.dart';
+import '../components/error_data_widget.dart';
 
 class CreateVenueScndView extends StatelessWidget {
   const CreateVenueScndView({super.key});
@@ -21,65 +22,67 @@ class CreateVenueScndView extends StatelessWidget {
         title: const Text("Add new venue"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppSizes.kHeight30,
-              const DocumentImagePicker(),
-              AppSizes.kHeight10,
-              DiscountAndAmountField(
-                controller: createVenueViewModel.venuePriceCntrllr,
-                title: "Amount",
-                hintText: "Per Hour",
-              ),
-              AppSizes.kHeight10,
-              DiscountAndAmountField(
-                controller: createVenueViewModel.venueDiscountCntrllr,
-                title: "Dicount %",
-                hintText: "Percentage%",
-              ),
-              AppSizes.kHeight20,
-              const VenueImageWidget(),
-              AppSizes.kHeight20,
-              SelectSportWidget(
-                allSports: allSports,
-                createVenueModel: createVenueViewModel,
-              ),
-              AppSizes.kHeight30,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 40,
-                    width: 100,
-                    child: ElevatedButton(
-                      onPressed: context
-                              .watch<CreateVenueViewModel>()
-                              .createVenueSecondValidate()
-                          ? () {
-                              Navigator.pushNamed(
-                                  context, AppScreens.createVenueThirdScreen);
-                              // if (_firstKey.currentState!.validate()) {
-                              //   log("form");
-                              // }
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        disabledBackgroundColor: AppColors.lightgrey,
-                      ),
-                      child: const Text("Next"),
+      body: createVenueViewModel.errorData?.code == 404
+          ? const NoInternetWidget()
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSizes.kHeight30,
+                    const DocumentImagePicker(),
+                    AppSizes.kHeight10,
+                    DiscountAndAmountField(
+                      controller: createVenueViewModel.venuePriceCntrllr,
+                      title: "Amount",
+                      hintText: "Per Hour",
                     ),
-                  ),
-                ],
+                    AppSizes.kHeight10,
+                    DiscountAndAmountField(
+                      controller: createVenueViewModel.venueDiscountCntrllr,
+                      title: "Dicount %",
+                      hintText: "Percentage%",
+                    ),
+                    AppSizes.kHeight20,
+                    const VenueImageWidget(),
+                    AppSizes.kHeight20,
+                    SelectSportWidget(
+                      allSports: allSports,
+                      createVenueModel: createVenueViewModel,
+                    ),
+                    AppSizes.kHeight30,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          width: 100,
+                          child: ElevatedButton(
+                            onPressed: context
+                                    .watch<CreateVenueViewModel>()
+                                    .createVenueSecondValidate()
+                                ? () {
+                                    Navigator.pushNamed(context,
+                                        AppScreens.createVenueThirdScreen);
+                                    // if (_firstKey.currentState!.validate()) {
+                                    //   log("form");
+                                    // }
+                                  }
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              disabledBackgroundColor: AppColors.lightgrey,
+                            ),
+                            child: const Text("Next"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

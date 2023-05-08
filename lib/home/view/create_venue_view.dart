@@ -6,6 +6,7 @@ import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import '../components/create_venue_components/district_picker_field.dart';
 import '../components/create_venue_components/venue_text_field.dart';
+import '../components/error_data_widget.dart';
 
 class CreateVenueView extends StatelessWidget {
   CreateVenueView({super.key});
@@ -20,7 +21,9 @@ class CreateVenueView extends StatelessWidget {
         title: const Text("Add new venue"),
         centerTitle: true,
       ),
-      body: GestureDetector(
+      body: createVenueViewModel.errorData?.code == 404
+          ? const NoInternetWidget()
+          : GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
 

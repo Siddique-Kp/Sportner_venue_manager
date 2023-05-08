@@ -6,6 +6,7 @@ import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
+import '../components/error_data_widget.dart';
 
 class HomeScreenView extends StatelessWidget {
   const HomeScreenView({super.key});
@@ -26,34 +27,38 @@ class HomeScreenView extends StatelessWidget {
           ),
         ),
       ),
-      body: vmVenueViewModel.isLoading
-          ? const Padding(
-              padding: EdgeInsets.only(left: 10, right: 10, top: 20),
-              child: ShimmerVenueCard(),
-            )
-          : RefreshIndicator(
-              onRefresh: () {
-                return context.read<HomeViewModel>().getVmVenueDatas();
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView(
-                  children: [
-                    AppSizes.kHeight20,
-                    VendorTurfCard(
-                      vmVenueDataList: vmVenueViewModel.vmVenueDataList,
+      body: vmVenueViewModel.errorResponseModel?.code == 404
+          ? const NoInternetWidget()
+          : vmVenueViewModel.isLoading
+              ? const Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 20),
+                  child: ShimmerVenueCard(),
+                )
+              : RefreshIndicator(
+                  onRefresh: () {
+                    return context.read<HomeViewModel>().getVmVenueDatas();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListView(
+                      children: [
+                        AppSizes.kHeight20,
+                        VendorTurfCard(
+                          vmVenueDataList: vmVenueViewModel.vmVenueDataList,
+                        ),
+                        const SizedBox(height: 70)
+                      ],
                     ),
-                    const SizedBox(height: 70)
-                  ],
-                ),
-              )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppScreens.createVenuefrstScreen);
-        },
-        backgroundColor: AppColors.appColor,
-        child: const Icon(Icons.add),
-      ),
+                  )),
+      floatingActionButton: vmVenueViewModel.errorResponseModel?.code == 404
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppScreens.createVenuefrstScreen);
+              },
+              backgroundColor: AppColors.appColor,
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }

@@ -14,11 +14,12 @@ class BookingViewModel with ChangeNotifier {
   }
 
   List<BookingDataModel> _bookingDataList = [];
-  ErrorResponseModel? _errorResponseModel;
+  ErrorResponseModel? _errorData;
   bool _isLoading = false;
 
   List<BookingDataModel> get bookingDataList => _bookingDataList;
   bool get isLoading => _isLoading;
+  ErrorResponseModel? get errorData => _errorData;
 
   getBookingDatas() async {
     setLoading(true);
@@ -52,9 +53,8 @@ class BookingViewModel with ChangeNotifier {
   }
 
   setErrorResponse(ErrorResponseModel errorResp) {
-    _errorResponseModel = errorResp;
+    _errorData = errorResp;
     notifyListeners();
-    return _errorResponseModel!.code;
   }
 
   setLoading(bool loading) {

@@ -86,19 +86,6 @@ class TextFormWidget extends StatelessWidget {
           ),
           prefixIconColor: AppColors.lightBlackColor,
           prefixIcon:
-              //  isPhone
-              //     ? Padding(
-              //         padding: const EdgeInsets.only(bottom: 2.3),
-              //         child: Row(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             Image.asset("assets/india_flag.png",
-              //                 width: 50, height: 20),
-              //             Text("+91", style: loginTextStyle)
-              //           ],
-              //         ),
-              //       )
-              //     :
               Icon(textFieldIcon, size: 25),
           suffixIconColor: AppColors.lightBlackColor,
           suffixIcon: isPassword && passController.text.isNotEmpty
