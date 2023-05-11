@@ -79,10 +79,10 @@ class SignUpViewModel with ChangeNotifier {
   getSignUpStatus(BuildContext context) async {
     final navigator = Navigator.of(context);
     setLoading(true);
-    final response = await ApiServices.postMethod(
+    final response = await ApiServices.dioPostMethod(
       url: Urls.kVENDORSIGNUP,
       body: vendorDatabody(),
-      function: vendorSignupModelFromJson,
+      jsonEncode: vendorSignupModelFromJson,
     );
     if (response is Success) {
       log("success");

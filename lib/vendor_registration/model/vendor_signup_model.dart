@@ -1,11 +1,7 @@
-// To parse this JSON data, do
-//
-//     final vendorSignupModel = vendorSignupModelFromJson(jsonString);
-
 import 'dart:convert';
 
-VendorSignupModel vendorSignupModelFromJson(String str) =>
-    VendorSignupModel.fromJson(json.decode(str));
+VendorSignupModel vendorSignupModelFromJson(Map<String, dynamic> str) =>
+    VendorSignupModel.fromJson(str);
 
 String vendorSignupModelToJson(VendorSignupModel data) =>
     json.encode(data.toJson());

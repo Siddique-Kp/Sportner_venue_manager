@@ -71,9 +71,9 @@ class CreateVenueViewModel with ChangeNotifier {
 
     final accessToken = await getAccessToken();
 
-    final response = await ApiServices.getMethod(
+    final response = await ApiServices.dioGetMethod(
         url: Urls.kGetAllSports,
-        headers: {"Authorization": accessToken!},
+        headers:accessToken,
         jsonDecod: sportsDataModelFromJson);
 
     if (response is Success) {

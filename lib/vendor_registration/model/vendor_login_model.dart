@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-VendorLoginModel vendorLoginModelFromJson(String str) => VendorLoginModel.fromJson(json.decode(str));
+VendorLoginModel vendorLoginModelFromJson(Map<String, dynamic> str) => VendorLoginModel.fromJson(str);
 
 String vendorLoginModelToJson(VendorLoginModel data) => json.encode(data.toJson());
 

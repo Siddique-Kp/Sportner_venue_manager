@@ -27,10 +27,10 @@ class HomeViewModel with ChangeNotifier {
 
     final accessToken = await getAccessToken();
 
-    final response = await ApiServices.getMethod(
+    final response = await ApiServices.dioGetMethod(
       url: Urls.kGetAllVenues,
       jsonDecod: vmVenueDataModelFromJson,
-      headers: {"Authorization": accessToken!},
+      headers: accessToken,
     );
 
     if (response is Success) {

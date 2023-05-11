@@ -4,9 +4,9 @@
 
 import 'dart:convert';
 
-List<VmVenueDataModel> vmVenueDataModelFromJson(String str) =>
+List<VmVenueDataModel> vmVenueDataModelFromJson(List<dynamic> str) =>
     List<VmVenueDataModel>.from(
-        json.decode(str).map((x) => VmVenueDataModel.fromJson(x)));
+        str.map((x) => VmVenueDataModel.fromJson(x)));
 
 String vmVenueDataModelToJson(List<VmVenueDataModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

@@ -47,13 +47,14 @@ class LoginViewModel with ChangeNotifier {
   getLoginStatus(BuildContext context) async {
     final navigator = Navigator.of(context);
     setLoading(true);
-    final response = await ApiServices.postMethod(
+    final response = await ApiServices.dioPostMethod(
       url: Urls.kVENDORSIGNIN,
       body: vendorDataBody(),
-      function: vendorLoginModelFromJson,
+      jsonEncode: vendorLoginModelFromJson,
     );
 
     if (response is Success) {
+      log(response.response.toString());
       final data = await setvendorData(response.response as VendorLoginModel);
       final accessToken = data!.accessToken;
       log(accessToken.toString());

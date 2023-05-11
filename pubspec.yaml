@@ -39,7 +39,6 @@ dependencies:
   firebase_core: ^2.9.0
   firebase_auth: ^4.4.0
   another_flushbar: ^1.12.29
-  http: ^0.13.5  
   shared_preferences: ^2.1.0
   google_sign_in: ^6.0.2
   image_picker: ^0.8.7+1

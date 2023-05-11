@@ -24,10 +24,10 @@ class BookingViewModel with ChangeNotifier {
   getBookingDatas() async {
     setLoading(true);
     final accessToken = await getAccessToken();
-    final response = await ApiServices.getMethod(
+    final response = await ApiServices.dioGetMethod(
       url: Urls.kGetAllbooking,
       jsonDecod: bookingDataModelFromJson,
-      headers: {"Authorization": accessToken!},
+      headers: accessToken,
     );
 
     if (response is Success) {
