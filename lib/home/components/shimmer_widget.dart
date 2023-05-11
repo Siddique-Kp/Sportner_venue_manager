@@ -1,38 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShimmerWidget extends StatelessWidget {
-  final double width;
-  final double height;
-  final ShapeBorder shapeBorder;
+  const ShimmerWidget({
+    super.key,
+    required this.height,
+    required this.width,
+    this.radius = 6,
+    this.color = AppColors.lightgrey,
+    this.child = const SizedBox()
+  });
 
-  const ShimmerWidget.rectangle({
-    super.key,
-    required this.width,
-    required this.height,
-    this.shapeBorder = const RoundedRectangleBorder(),
-  });
-  const ShimmerWidget.circle({
-    super.key,
-    required this.width,
-    required this.height,
-    this.shapeBorder = const CircleBorder(),
-  });
+  final double height;
+  final double width;
+  final double radius;
+  final Color color;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.grey[400]!,
+      baseColor: AppColors.grey[500]!,
       highlightColor: AppColors.grey[300]!,
-      child: Container(
+      child: BlankContainer(
         height: height,
         width: width,
-        decoration: ShapeDecoration(
-          color: AppColors.grey,
-          shape: shapeBorder,
-        ),
+        radius: radius,
+        color: color,
+        child: child,
       ),
     );
   }
 }
+
+class BlankContainer extends StatelessWidget {
+  const BlankContainer({
+    super.key,
+    required this.height,
+    required this.width,
+    this.radius = 6,
+    this.color = AppColors.lightgrey,
+    this.child = const SizedBox(),
+  });
+
+  final double height;
+  final double width;
+  final double radius;
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height.h,
+      width: width.w,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius.r),
+        color: color,
+      ),
+      child: child,
+    );
+  }
+}
+

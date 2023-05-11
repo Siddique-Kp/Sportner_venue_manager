@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
@@ -159,6 +157,7 @@ class VendorTurfCard extends StatelessWidget {
       width: size.width * 0.833,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
+        color: const Color.fromARGB(255, 216, 216, 216),
         image: DecorationImage(
           image: NetworkImage(vmVenueDataList[index].image!),
           fit: BoxFit.cover,

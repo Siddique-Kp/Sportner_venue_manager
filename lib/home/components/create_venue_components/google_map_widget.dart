@@ -15,7 +15,7 @@ class GoogleMapWidget extends StatelessWidget {
     final createVenueViewModel = context.read<CreateVenueViewModel>();
     try {
       return googleMapViewModel.currentLocation == null
-          ? ShimmerWidget.rectangle(width: double.infinity, height: height)
+          ? ShimmerWidget(width: double.infinity, height: height)
           : GoogleMap(
               zoomControlsEnabled: false,
               // myLocationButtonEnabled: false,

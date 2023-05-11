@@ -32,7 +32,7 @@ class HomeScreenView extends StatelessWidget {
           : vmVenueViewModel.isLoading
               ? const Padding(
                   padding: EdgeInsets.only(left: 10, right: 10, top: 20),
-                  child: ShimmerVenueCard(),
+                  child: VenueLoadingCart(),
                 )
               : RefreshIndicator(
                   onRefresh: () {
@@ -49,7 +49,8 @@ class HomeScreenView extends StatelessWidget {
                         const SizedBox(height: 70)
                       ],
                     ),
-                  )),
+                  ),
+                ),
       floatingActionButton: vmVenueViewModel.errorResponseModel?.code == 404
           ? null
           : FloatingActionButton(

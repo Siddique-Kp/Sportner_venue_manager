@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
 import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
@@ -49,45 +50,49 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => GoogleMapViewModel(),
         ),
-        
       ],
-      child: MaterialApp(
-        title: 'sportner turf booking app',
-        debugShowCheckedModeBanner: false,
-        builder: (context, child) {
-          return ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: child!,
-          );
-        },
-        theme: ThemeData(
-          scaffoldBackgroundColor: AppColors.scaffoldColor,
-          // primarySwatch: PrimaryColor.appColor,
-          primaryColor: AppColors.appColor,
-          elevatedButtonTheme: const ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(
-                AppColors.kButtonColor,
+      child: ScreenUtilInit(
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp(
+              title: 'sportner turf booking app',
+              debugShowCheckedModeBanner: false,
+              builder: (context, child) {
+                return ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: child!,
+                );
+              },
+              theme: ThemeData(
+                scaffoldBackgroundColor: AppColors.scaffoldColor,
+                // primarySwatch: PrimaryColor.appColor,
+                primaryColor: AppColors.appColor,
+                elevatedButtonTheme: const ElevatedButtonThemeData(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                      AppColors.kButtonColor,
+                    ),
+                  ),
+                ),
+                brightness: Brightness.light,
+                appBarTheme: const AppBarTheme(
+                    backgroundColor: AppColors.white,
+                    iconTheme: IconThemeData(
+                      color: AppColors.black,
+                    ),
+                    titleTextStyle: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    elevation: 3),
               ),
-            ),
-          ),
-          brightness: Brightness.light,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: AppColors.white,
-            iconTheme: IconThemeData(
-              color: AppColors.black,
-
-            ),
-              titleTextStyle: TextStyle(
-                color: AppColors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-              elevation: 3),
-        ),
-        routes: AppScreens.routes,
-        initialRoute: "/splashScreen",
-      ),
+              routes: AppScreens.routes,
+              initialRoute: "/splashScreen",
+            );
+          }),
     );
   }
 }
