@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/model/booking_data_model.dart';
-import 'package:sportner_venue_manager/home/model/error_response_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/keys.dart';
 import '../../repo/api_services.dart';
@@ -14,12 +14,20 @@ class BookingViewModel with ChangeNotifier {
   }
 
   List<BookingDataModel> _bookingDataList = [];
-  ErrorResponseModel? _errorData;
+  List<BookingDataModel> _allbookingList = [];
+  final List<BookingDataModel> _pendingbookings = [];
+  final List<BookingDataModel> _completedBookings = [];
+  int? _errorCode;
+  int _totalEarnings = 0;
   bool _isLoading = false;
 
   List<BookingDataModel> get bookingDataList => _bookingDataList;
+  List<BookingDataModel> get allbookingList => _allbookingList;
+  List<BookingDataModel> get pendingbookings => _pendingbookings;
+  List<BookingDataModel> get completedBookings => _completedBookings;
+  int get totalEarnings => _totalEarnings;
   bool get isLoading => _isLoading;
-  ErrorResponseModel? get errorData => _errorData;
+  int? get errorCode => _errorCode;
 
   getBookingDatas() async {
     setLoading(true);
@@ -39,27 +47,102 @@ class BookingViewModel with ChangeNotifier {
     if (response is Failure) {
       log("failed");
       setLoading(false);
-      final errorResponse = ErrorResponseModel(
-        code: response.code,
-        message: response.errorResponse,
-      );
-      setErrorResponse(errorResponse);
+      setErrorResponse(response);
     }
   }
 
-  setBookingDatas(List<BookingDataModel> bookingDataList) {
-    _bookingDataList = bookingDataList;
+  setBookingDatas(List<BookingDataModel> bookingData) {
+    _bookingDataList = bookingData;
+    _allbookingList = bookingDataList;
+    setCompletedList();
+    setPendingList();
     notifyListeners();
   }
 
-  setErrorResponse(ErrorResponseModel errorResp) {
-    _errorData = errorResp;
+  setSelectedPopUp(String value) {
+    _allbookingList = [];
+    if (value == "all") {
+      _allbookingList = _bookingDataList;
+    } else if (value == "pending") {
+      _allbookingList = _pendingbookings;
+    } else if (value == "completed") {
+      _allbookingList = _completedBookings;
+    }
+    notifyListeners();
+  }
+
+  setCompletedList() {
+    _completedBookings.clear();
+    for (var element in _bookingDataList) {
+      final isCompleted = isBookingExpired(element);
+      if (isCompleted) {
+        _completedBookings.add(element);
+      }
+    }
+    notifyListeners();
+  }
+
+  setPendingList() {
+    _pendingbookings.clear();
+    for (var element in _bookingDataList) {
+      final isCompleted = isBookingExpired(element);
+      if (!isCompleted) {
+        _pendingbookings.add(element);
+      }
+    }
+    notifyListeners();
+  }
+
+  setErrorResponse(Failure error) {
+    _errorCode = error.code;
     notifyListeners();
   }
 
   setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
+  }
+
+  // Convert to 12 hours
+  String convertTo12HourFormat(String time24) {
+    if (time24 == "HH:MM") {
+      return time24;
+    }
+    DateTime time = DateFormat('HH:mm').parse(time24);
+
+    String time12 = DateFormat('h:mm a').format(time);
+
+    return time12;
+  }
+
+  getTotalEarnings() {
+    _totalEarnings = 0;
+    for (var element in _bookingDataList) {
+      if (element.refund != "processed") {
+        _totalEarnings += element.price ?? 0;
+        notifyListeners();
+      }
+    }
+  }
+
+  bool isBookingExpired(BookingDataModel bookedVenue) {
+    final formatedDate = DateFormat('d,MMM,y').parse(bookedVenue.slotDate!);
+    final parsedTimeOnly =
+        DateFormat('HH:mm').parse(bookedVenue.slotTime!.split("-").first);
+
+    final parsedDateTime = DateTime(
+      formatedDate.year,
+      formatedDate.month,
+      formatedDate.day,
+      parsedTimeOnly.hour,
+      parsedTimeOnly.minute,
+    );
+
+    if (parsedDateTime.isBefore(DateTime.now())) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<String?> getAccessToken() async {

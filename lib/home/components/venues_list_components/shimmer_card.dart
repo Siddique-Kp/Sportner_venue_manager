@@ -4,8 +4,8 @@ import 'package:sportner_venue_manager/home/components/shimmer_widget.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 
-class VenueLoadingCart extends StatelessWidget {
-  const VenueLoadingCart({
+class VenueLoadingCard extends StatelessWidget {
+  const VenueLoadingCard({
     super.key,
   });
 

@@ -8,6 +8,7 @@ import 'package:sportner_venue_manager/utils/global_values.dart';
 import '../../utils/global_colors.dart';
 import '../../vendor_registration/view_model/firebase_auth_view_model.dart';
 import '../components/bookings_components/booking_card.dart';
+import '../components/bookings_components/bookings_pop_up_button.dart';
 
 class BookingsScreenView extends StatelessWidget {
   const BookingsScreenView({super.key});
@@ -18,7 +19,6 @@ class BookingsScreenView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.appColor,
-        centerTitle: true,
         title: const Text(
           "Bookings",
           style: TextStyle(
@@ -26,22 +26,9 @@ class BookingsScreenView extends StatelessWidget {
           ),
         ),
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              NormalAlertBox.alertBox(
-                context: context,
-                title: "Log out!",
-                content: "Do you want to logout",
-                onPressed: () {
-                       context.read<FirebaseAuthViewModel>().vendorLoginStatus(context);
-              context.read<BottomNavViewModel>().changeBottomNavindex(0);
-                },
-              );
-         
-            },
-            icon: const Icon(Icons.logout),
-          )
+        actions: const [
+           BookingsPopUpButton(),
+          
         ],
       ),
       body: RefreshIndicator(
@@ -61,15 +48,15 @@ class BookingsScreenView extends StatelessWidget {
               ],
             ),
           ),
-          child: bookingViewModel.errorData?.code == 404
+          child: bookingViewModel.errorCode == 404
               ? const NoInternetWidget()
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: ListView(
                     children: [
-                      AppSizes.kHeight20,
+                      AppSizes.kHeight10,
                       BookingCard(
-                        bookingDataList: bookingViewModel.bookingDataList,
+                        bookingDataList: bookingViewModel.allbookingList,
                       ),
                     ],
                   ),

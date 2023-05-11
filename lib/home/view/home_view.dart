@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/shimmer_card.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/vendor_turf_cartd.dart';
+import 'package:sportner_venue_manager/home/view/create_venue_scnd_view.dart';
+import 'package:sportner_venue_manager/home/view/create_venue_view.dart';
 import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
+import '../../vendor_registration/view_model/firebase_auth_view_model.dart';
 import '../components/error_data_widget.dart';
+import '../components/normal_alert_box.dart';
+import '../view_model/bottom_navbar_view_model.dart';
 
 class HomeScreenView extends StatelessWidget {
   const HomeScreenView({super.key});
@@ -26,14 +31,30 @@ class HomeScreenView extends StatelessWidget {
             color: AppColors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            color: AppColors.white,
+            onPressed: () async {
+              NormalAlertBox.alertBox(
+                context: context,
+                title: "Log out!",
+                content: "Do you want to logout",
+                onPressed: () {
+                  context
+                      .read<FirebaseAuthViewModel>()
+                      .vendorLoginStatus(context);
+                  context.read<BottomNavViewModel>().changeBottomNavindex(0);
+                },
+              );
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       body: vmVenueViewModel.errorResponseModel?.code == 404
           ? const NoInternetWidget()
           : vmVenueViewModel.isLoading
-              ? const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 20),
-                  child: VenueLoadingCart(),
-                )
+              ? const VenueLoadingCard()
               : RefreshIndicator(
                   onRefresh: () {
                     return context.read<HomeViewModel>().getVmVenueDatas();
@@ -55,7 +76,8 @@ class HomeScreenView extends StatelessWidget {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppScreens.createVenuefrstScreen);
+                Navigator.push(
+                    context, AppScreens.animatedRoute(CreateVenueView()));
               },
               backgroundColor: AppColors.appColor,
               child: const Icon(Icons.add),

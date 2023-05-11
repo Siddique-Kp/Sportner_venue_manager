@@ -55,4 +55,9 @@ class AppTextStyles {
     fontSize: 13,
     color: Colors.black,
   );
+    static TextStyle textH5White = const TextStyle(
+    color: AppColors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+  );
 }
