@@ -1,8 +1,10 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
+import 'package:sportner_venue_manager/home/components/warning_alert_box.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
+import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';
@@ -26,7 +28,6 @@ class VendorTurfCard extends StatelessWidget {
       itemCount: vmVenueDataList.length,
       separatorBuilder: (context, index) => AppSizes.kHeight20,
       itemBuilder: (context, index) {
-        log(vmVenueDataList.length.toString());
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -60,7 +61,7 @@ class VendorTurfCard extends StatelessWidget {
                   ),
                 ),
                 _venueSportsFacility(size, index),
-                _deleteButton(),
+                _venueBlockButton(context, index),
                 _editButton(context, index),
               ],
             ),
@@ -90,26 +91,61 @@ class VendorTurfCard extends StatelessWidget {
             ),
           );
         },
-        child: const CircleAvatar(
-          backgroundColor: Color.fromARGB(255, 225, 225, 225),
-          child: Icon(
-            Icons.edit,
-            color: AppColors.black,
+        child: Material(
+          elevation: 1,
+          borderRadius: BorderRadius.circular(45),
+          child: const CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 225, 225, 225),
+            child: Icon(
+              Icons.edit,
+              color: AppColors.black,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Positioned _deleteButton() {
-    return const Positioned(
+  Positioned _venueBlockButton(BuildContext context, int index) {
+    return Positioned(
       bottom: 0,
       right: 20,
-      child: CircleAvatar(
-        backgroundColor: Color.fromARGB(255, 225, 225, 225),
-        child: Icon(
-          Icons.block,
-          color: Color.fromARGB(186, 255, 17, 0),
+      child: GestureDetector(
+        onTap: () {
+          AlertBoxWidget.alertBox(
+            context: context,
+            blockButton: () {
+              context
+                  .read<HomeViewModel>()
+                  .getBlockVenue(vmVenueDataList[index].id!);
+              Navigator.pop(context);
+              GlassSnackBar.snackBar(
+                context: context,
+                title: vmVenueDataList[index].vmIsBlocked!
+                    ? "Venue unblocked"
+                    : "Venue blocked!",
+                subtitle:
+                    "Venue ${vmVenueDataList[index].vmIsBlocked! ? "Unblocked" : "Blocked"} successfully!",
+              );
+            },
+            blockStatus: vmVenueDataList[index].vmIsBlocked!,
+            title: "Venue",
+            blockText:
+                vmVenueDataList[index].vmIsBlocked! ? "Unblock" : "Block",
+          );
+        },
+        child: Material(
+          elevation: 1,
+          borderRadius: BorderRadius.circular(45),
+          child: CircleAvatar(
+            backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+            child: Icon(
+              Icons.block,
+              color: vmVenueDataList[index].vmIsBlocked!
+                  ? AppColors.green
+                  : const Color.fromARGB(186, 255, 17, 0),
+            ),
+          ),
         ),
       ),
     );

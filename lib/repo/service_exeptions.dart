@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloudinary/cloudinary.dart';
+
 import '../utils/constants.dart';
 import 'api_status.dart';
 
@@ -26,6 +28,13 @@ class ServiceExeptions {
         code: InvalidRespons.kNOINTERNET,
         errorResponse: "No internet connection",
       );
+    } else if (e is DioError) {
+      log("SocketException");
+      // log(e.message);
+      return Failure(
+        code: InvalidRespons.kNOINTERNET,
+        errorResponse: "No internet connection",
+      );
     } else if (e is TimeoutException) {
       log("TimeoutException");
 
@@ -35,7 +44,6 @@ class ServiceExeptions {
       );
     } else {
       log("Failure");
-
       return Failure(
         code: InvalidRespons.kUNKNOWNERROR,
         errorResponse: "Unknown Error",

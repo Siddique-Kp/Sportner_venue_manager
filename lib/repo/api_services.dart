@@ -36,6 +36,34 @@ class ApiServices {
     }
   }
 
+  static Future<Object> dioPutMethod({
+    required String url,
+    required Object? body,
+    String? headers,
+    Function? jsonEncode,
+  }) async {
+    // log(body.toString());
+    final dio = Dio();
+    try {
+      dio.options.headers["Authorization"] = headers;
+      final response = await dio.put(url, data: body);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        log("Success");
+        return Success(
+          response: jsonEncode == null ? null : jsonEncode(response.data),
+          code: response.statusCode,
+        );
+      }
+      log(response.statusCode.toString());
+      return Failure(
+        code: response.statusCode,
+        errorResponse: "Invalid Response",
+      );
+    } on Exception catch (e) {
+      return ServiceExeptions.cases(e);
+    }
+  }
+
   static Future<Object> dioGetMethod({
     required String url,
     Function? jsonDecod,
@@ -46,7 +74,6 @@ class ApiServices {
       dio.options.headers["Authorization"] = headers;
       final response = await dio.get(url);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // log(response.data.toString());
         return Success(
           response: jsonDecod == null ? null : jsonDecod(response.data),
         );
@@ -55,6 +82,7 @@ class ApiServices {
       return Failure(
           code: response.statusCode, errorResponse: "Invalid Response");
     } on Exception catch (e) {
+      log(e.toString());
       return ServiceExeptions.cases(e);
     }
   }

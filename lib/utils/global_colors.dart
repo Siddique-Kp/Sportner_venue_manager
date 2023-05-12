@@ -11,7 +11,12 @@ class AppColors {
   static const grey = Colors.grey;
   static const red = Colors.red;
   static const green = Colors.green;
+
+    /// Light colors
+  static const klightBlackColor = Colors.black54;
   static const lightgrey = Color.fromARGB(45, 158, 158, 158);
+  static const lightgreen = Color.fromARGB(65, 76, 175, 79);
+  static const lightred = Color.fromARGB(65, 244, 67, 54);
 }
 
 class PrimaryColor {

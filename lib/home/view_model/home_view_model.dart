@@ -7,7 +7,6 @@ import 'package:sportner_venue_manager/utils/keys.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 
-
 class HomeViewModel with ChangeNotifier {
   HomeViewModel() {
     getVmVenueDatas();
@@ -17,13 +16,13 @@ class HomeViewModel with ChangeNotifier {
   bool _isLoading = false;
 
   List<VmVenueDataModel> get vmVenueDataList => _vmVenueDataList;
-  int? get errorCode =>_errorCode;
+  int? get errorCode => _errorCode;
 
   bool get isLoading => _isLoading;
 
   getVmVenueDatas() async {
     setLoading(true);
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
 
     final accessToken = await getAccessToken();
 
@@ -46,8 +45,40 @@ class HomeViewModel with ChangeNotifier {
     }
   }
 
+  getBlockVenue(String venueId) async {
+    final accessToken = await getAccessToken();
+
+    final response = await ApiServices.dioPutMethod(
+      url: Urls.kBlockVenue,
+      body: {"id": venueId},
+      headers: accessToken,
+    );
+
+    if (response is Success) {
+      log("success");
+      setBlockVenue(venueId);
+    }
+    if (response is Failure) {
+      log("failed");
+      log(response.errorResponse.toString());
+    }
+  }
+
   setVmVenueDatas(List<VmVenueDataModel> vmVenueDataList) {
     _vmVenueDataList = vmVenueDataList;
+    log(_vmVenueDataList[0].isBlocked.toString());
+    notifyListeners();
+  }
+
+  setBlockVenue(String venueId) {
+    final venueData = _vmVenueDataList.any((element) => element.id == venueId);
+    if (venueData) {
+      final index =
+          _vmVenueDataList.indexWhere((element) => element.id == venueId);
+
+      _vmVenueDataList[index].vmIsBlocked =
+          !_vmVenueDataList[index].vmIsBlocked!;
+    }
     notifyListeners();
   }
 
