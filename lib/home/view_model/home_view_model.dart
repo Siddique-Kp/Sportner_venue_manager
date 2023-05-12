@@ -13,11 +13,11 @@ class HomeViewModel with ChangeNotifier {
     getVmVenueDatas();
   }
   List<VmVenueDataModel> _vmVenueDataList = [];
-  Failure? _errorResponseModel;
+  int? _errorCode;
   bool _isLoading = false;
 
   List<VmVenueDataModel> get vmVenueDataList => _vmVenueDataList;
-  Failure? get errorResponseModel =>_errorResponseModel;
+  int? get errorCode =>_errorCode;
 
   bool get isLoading => _isLoading;
 
@@ -57,7 +57,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   setErrorResponse(Failure error) {
-    _errorResponseModel = error;
+    _errorCode = error.code;
     notifyListeners();
   }
 

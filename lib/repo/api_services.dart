@@ -12,7 +12,7 @@ class ApiServices {
     String? headers,
     Function? jsonEncode,
   }) async {
-    log(body.toString());
+    // log(body.toString());
     final dio = Dio();
     try {
       dio.options.headers["Authorization"] = headers;
@@ -25,7 +25,7 @@ class ApiServices {
           code: response.statusCode,
         );
       }
-      log(response.data.toString());
+      // log(response.data.toString());
       log(response.statusCode.toString());
       return Failure(
         code: response.statusCode,
@@ -46,7 +46,7 @@ class ApiServices {
       dio.options.headers["Authorization"] = headers;
       final response = await dio.get(url);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        log(response.data.toString());
+        // log(response.data.toString());
         return Success(
           response: jsonDecod == null ? null : jsonDecod(response.data),
         );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/shimmer_card.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/vendor_turf_cartd.dart';
-import 'package:sportner_venue_manager/home/view/create_venue_scnd_view.dart';
 import 'package:sportner_venue_manager/home/view/create_venue_view.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
@@ -51,7 +51,7 @@ class HomeScreenView extends StatelessWidget {
           )
         ],
       ),
-      body: vmVenueViewModel.errorResponseModel?.code == 404
+      body: vmVenueViewModel.errorCode == 404
           ? const NoInternetWidget()
           : vmVenueViewModel.isLoading
               ? const VenueLoadingCard()
@@ -72,12 +72,17 @@ class HomeScreenView extends StatelessWidget {
                     ),
                   ),
                 ),
-      floatingActionButton: vmVenueViewModel.errorResponseModel?.code == 404
+      floatingActionButton: vmVenueViewModel.errorCode == 404
           ? null
           : FloatingActionButton(
               onPressed: () {
+                context.read<CreateVenueViewModel>().clearAllDatas();
                 Navigator.push(
-                    context, AppScreens.animatedRoute(CreateVenueView()));
+                  context,
+                  AppScreens.animatedRoute(
+                    CreateVenueView(),
+                  ),
+                );
               },
               backgroundColor: AppColors.appColor,
               child: const Icon(Icons.add),

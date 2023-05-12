@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/model/create_venue_model.dart';
 import 'package:sportner_venue_manager/home/model/sports_data_model.dart';
+import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
@@ -35,11 +36,10 @@ class CreateVenueViewModel with ChangeNotifier {
   SportsDataModel? _sportsData;
   bool _isLoadingSport = false;
   bool _isLoading = false;
-  final List<bool> _checkBoxValue = List.filled(24, false);
   File? _venueDocument;
   String? venueDocClodinary;
   File? _venueImage;
-  String? venueImageCloudinary;
+  String? _venueImageCloudinary;
   final List<int> _selectedSportIndex = [];
   final List<SportFacility> _selectedFacility = [];
   FacilityDetail? _facility;
@@ -50,9 +50,9 @@ class CreateVenueViewModel with ChangeNotifier {
   SportsDataModel? get sportsData => _sportsData;
   bool get isLoadingSport => _isLoadingSport;
   bool get isLoading => _isLoading;
-  List<bool> get checkBoxValue => _checkBoxValue;
   File? get venueDocument => _venueDocument;
   File? get venueImage => _venueImage;
+  String? get venueImageCloudinary => _venueImageCloudinary;
   List<int> get selectedSportIndex => _selectedSportIndex;
   List<SportFacility> get selectedFacility => _selectedFacility;
   FacilityDetail? get facility => _facility;
@@ -61,7 +61,7 @@ class CreateVenueViewModel with ChangeNotifier {
 
   getDistrict(String district) {
     _districtName = district;
-    notifyListeners();
+    // notifyListeners();
   }
 
   /// GET AVAILABLE SPORTS DATA FROM SERVER
@@ -73,7 +73,7 @@ class CreateVenueViewModel with ChangeNotifier {
 
     final response = await ApiServices.dioGetMethod(
         url: Urls.kGetAllSports,
-        headers:accessToken,
+        headers: accessToken,
         jsonDecod: sportsDataModelFromJson);
 
     if (response is Success) {
@@ -161,8 +161,11 @@ class CreateVenueViewModel with ChangeNotifier {
   venueImagePicker(context) async {
     _venueImage = await imagePicker(context);
     if (_venueImage != null) {
-      venueImageCloudinary = await cloudinaryImage(_venueImage!);
+      log('Here');
+      _venueImageCloudinary = await cloudinaryImage(_venueImage!);
+      log(_venueImageCloudinary.toString());
     }
+    notifyListeners();
   }
 
   Future<File?> imagePicker(context) async {
@@ -265,7 +268,7 @@ class CreateVenueViewModel with ChangeNotifier {
       document: venueDocClodinary,
       actualPrice: venuePriceCntrllr.text.trim(),
       discountPercentage: venueDiscountCntrllr.text.trim(),
-      image: venueImageCloudinary,
+      image: _venueImageCloudinary,
       sportFacility: _selectedFacility,
       lat: selectedLocation?.latitude.toString() ??
           currentLocation?.latitude.toString(),
@@ -293,7 +296,6 @@ class CreateVenueViewModel with ChangeNotifier {
 
     if (response is Failure) {
       log("Create venue failed");
-
       setLoading(false);
     }
   }
@@ -357,5 +359,48 @@ class CreateVenueViewModel with ChangeNotifier {
 
   notifyUi() {
     notifyListeners();
+  }
+
+  setEditVenueValues({
+    required VmVenueDataModel venueData,
+    required bool isEditVenue,
+  }) {
+    log("hiiiiiii");
+    if (isEditVenue) {
+      venueNameCntrllr.text = venueData.venueName!;
+      venueMobileCntrllr.text = venueData.mobile.toString();
+      venueAddressCntrllr.text = venueData.place!;
+      getDistrict(venueData.district!);
+      venueDescriptionCntrllr.text = venueData.description!;
+
+      venuePriceCntrllr.text = venueData.actualPrice.toString();
+      venueDiscountCntrllr.text = venueData.discountPercentage.toString();
+
+      _venueImageCloudinary = venueData.image!;
+    }
+  }
+
+  clearAllDatas() {
+    venueNameCntrllr.clear();
+    venueMobileCntrllr.clear();
+    venueAddressCntrllr.clear();
+    _districtName = 'Select District';
+    venueDescriptionCntrllr.clear();
+    _venueDocument = null;
+    _venueImage = null;
+    _venueImageCloudinary = "";
+    venueDocClodinary = "";
+    venuePriceCntrllr.clear();
+    venueDiscountCntrllr.clear();
+    _selectedSportIndex.clear();
+    _defaultFacility = null;
+    _facility = null;
+    _selectedFacility.clear();
+    selectedLocation = null;
+    for (var element in allSlotsOfDay) {
+      element.slots!.clear();
+    }
+    dayCheckboxValues
+        .forEach((key, value) => value.fillRange(0, value.length, false));
   }
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/components/bookings_components/booking_loading_widget.dart';
 import 'package:sportner_venue_manager/home/components/error_data_widget.dart';
-import 'package:sportner_venue_manager/home/components/normal_alert_box.dart';
 import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
-import 'package:sportner_venue_manager/home/view_model/bottom_navbar_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import '../../utils/global_colors.dart';
-import '../../vendor_registration/view_model/firebase_auth_view_model.dart';
 import '../components/bookings_components/booking_card.dart';
 import '../components/bookings_components/bookings_pop_up_button.dart';
 
@@ -27,13 +25,14 @@ class BookingsScreenView extends StatelessWidget {
         ),
         elevation: 0,
         actions: const [
-           BookingsPopUpButton(),
-          
+          BookingsPopUpButton(),
         ],
       ),
       body: RefreshIndicator(
         onRefresh: () => bookingViewModel.getBookingDatas(),
-        child: Container(
+        child: bookingViewModel.isLoading
+              ? const BookingLoadingWidget()
+              :  Container(
           height: double.infinity,
           width: double.infinity,
           decoration: const BoxDecoration(
@@ -48,19 +47,19 @@ class BookingsScreenView extends StatelessWidget {
               ],
             ),
           ),
-          child: bookingViewModel.errorCode == 404
-              ? const NoInternetWidget()
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: ListView(
-                    children: [
-                      AppSizes.kHeight10,
-                      BookingCard(
-                        bookingDataList: bookingViewModel.allbookingList,
+          child:bookingViewModel.errorCode == 404
+                  ? const NoInternetWidget()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ListView(
+                        children: [
+                          AppSizes.kHeight10,
+                          BookingCard(
+                            bookingDataList: bookingViewModel.allbookingList,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
         ),
       ),
     );

@@ -1,9 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
+import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';
+import '../../view/create_venue_view.dart';
+import '../../view/venue_details_view.dart';
 import 'sports_icon.dart';
 
 class VendorTurfCard extends StatelessWidget {
@@ -23,47 +27,68 @@ class VendorTurfCard extends StatelessWidget {
       separatorBuilder: (context, index) => AppSizes.kHeight20,
       itemBuilder: (context, index) {
         log(vmVenueDataList.length.toString());
-        return SizedBox(
-          height: size.height * 0.32,
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Card(
-                  child: SizedBox(
-                    height: size.height * 0.265,
-                    width: double.infinity,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VenueDetailsView(
+                  index: index,
+                ),
+              ),
+            );
+          },
+          child: SizedBox(
+            height: size.height * 0.32,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Card(
+                    child: SizedBox(
+                      height: size.height * 0.265,
+                      width: double.infinity,
+                    ),
                   ),
                 ),
-              ),
-              Center(
-                child: Column(
-                  children: [
-                    _imageContainer(size, index),
-                    _venueDetails(index)
-                  ],
+                Center(
+                  child: Column(
+                    children: [
+                      _imageContainer(size, index),
+                      _venueDetails(index)
+                    ],
+                  ),
                 ),
-              ),
-              _venueSportsFacility(size, index),
-              _deleteButton(),
-              _editButton(context),
-            ],
+                _venueSportsFacility(size, index),
+                _deleteButton(),
+                _editButton(context, index),
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  Positioned _editButton(BuildContext context) {
+  Positioned _editButton(BuildContext context, int index) {
     return Positioned(
       bottom: 0,
       right: 65,
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
-          // GlassSnackBar.snackBar(
-          //     context: context,
-          //     title: "Created Succsess!",
-          //     subtitle: "Venue Created Succsess!");
+          context.read<CreateVenueViewModel>().setEditVenueValues(
+                venueData: vmVenueDataList[index],
+                isEditVenue: true,
+              );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateVenueView(
+                isEditVenue: true,
+                index: index,
+              ),
+            ),
+          );
         },
         child: const CircleAvatar(
           backgroundColor: Color.fromARGB(255, 225, 225, 225),

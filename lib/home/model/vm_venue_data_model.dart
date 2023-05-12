@@ -48,7 +48,7 @@ class VmVenueDataModel {
   String? image;
   String? document;
   List<Slot>? slots;
-  List<SportFacility>? sportFacility;
+  List<VmSportFacility>? sportFacility;
   double? lat;
   double? lng;
   bool? isBlocked;
@@ -76,8 +76,8 @@ class VmVenueDataModel {
             : List<Slot>.from(json["slots"]!.map((x) => Slot.fromJson(x))),
         sportFacility: json["sportFacility"] == null
             ? []
-            : List<SportFacility>.from(
-                json["sportFacility"]!.map((x) => SportFacility.fromJson(x))),
+            : List<VmSportFacility>.from(
+                json["sportFacility"]!.map((x) => VmSportFacility.fromJson(x))),
         lat: json["lat"]?.toDouble(),
         lng: json["lng"]?.toDouble(),
         isBlocked: json["isBlocked"],
@@ -143,8 +143,8 @@ class Slot {
       };
 }
 
-class SportFacility {
-  SportFacility({
+class VmSportFacility {
+  VmSportFacility({
     this.sportId,
     this.sport,
     this.facility,
@@ -156,7 +156,7 @@ class SportFacility {
   String? facility;
   String? id;
 
-  factory SportFacility.fromJson(Map<String, dynamic> json) => SportFacility(
+  factory VmSportFacility.fromJson(Map<String, dynamic> json) => VmSportFacility(
         sportId: json["sportId"],
         sport: json["sport"],
         facility: json["facility"],
