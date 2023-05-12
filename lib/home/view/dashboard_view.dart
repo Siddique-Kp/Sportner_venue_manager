@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
 import '../../utils/global_colors.dart';
 import '../components/dashboard_components/bookings_dashboard.dart';
 import '../components/dashboard_components/earnings_dashboard.dart';
 import '../components/dashboard_components/graph_widget.dart';
+import '../view_model/booking_view_model.dart';
 
 class DashBoardView extends StatelessWidget {
   const DashBoardView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bookingViewModel = context.watch<BookingViewModel>();
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -45,7 +48,10 @@ class DashBoardView extends StatelessWidget {
                   AppSizes.kHeight20,
                   const EarningDashboard(),
                   AppSizes.kHeight20,
-                  BookingPieChart(),
+                  BookingPieChart(
+                    onlineEarning: bookingViewModel.onlineEarnings,
+                    offlineEarning: bookingViewModel.offlineEarnings,
+                  ),
                 ],
               ),
             ),

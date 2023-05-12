@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view_model/booking_view_model.dart';
 
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
@@ -11,6 +13,7 @@ class EarningDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookingViewModel = context.watch<BookingViewModel>();
     return SizedBox(
       height: 150,
       width: double.infinity,
@@ -39,7 +42,7 @@ class EarningDashboard extends StatelessWidget {
                         style: AppTextStyles.textH4grey,
                       ),
                       Text(
-                        "0 Earnings",
+                        "₹ ${bookingViewModel.onlineEarnings}.0",
                         style: AppTextStyles.textH3,
                       ),
                     ],
@@ -64,7 +67,7 @@ class EarningDashboard extends StatelessWidget {
                         style: AppTextStyles.textH4grey,
                       ),
                       Text(
-                        "0 Earnings",
+                        "₹ ${bookingViewModel.offlineEarnings}.0",
                         style: AppTextStyles.textH3,
                       ),
                     ],
@@ -91,7 +94,7 @@ class EarningDashboard extends StatelessWidget {
                   AppSizes.kHeight30,
                   Text("Total Earnings", style: AppTextStyles.textH4grey),
                   AppSizes.kHeight10,
-                  Text("0 Earnings", style: AppTextStyles.textH3),
+                  Text("₹ ${bookingViewModel.totalEarnings}.0", style: AppTextStyles.textH3),
                 ],
               ),
             ),

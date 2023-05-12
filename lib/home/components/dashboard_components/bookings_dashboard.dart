@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';
+import '../../view_model/booking_view_model.dart';
 
 class BookingDashboard extends StatelessWidget {
   const BookingDashboard({
@@ -11,6 +13,7 @@ class BookingDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bookingViewModel = context.watch<BookingViewModel>();
     return SizedBox(
       height: 150,
       width: double.infinity,
@@ -35,7 +38,8 @@ class BookingDashboard extends StatelessWidget {
                   AppSizes.kHeight30,
                   Text("Total Bookings", style: AppTextStyles.textH4grey),
                   AppSizes.kHeight10,
-                  Text("0 Bookings", style: AppTextStyles.textH3),
+                  Text("${bookingViewModel.bookingDataList.length} Bookings",
+                      style: AppTextStyles.textH3),
                 ],
               ),
             ),
@@ -62,7 +66,7 @@ class BookingDashboard extends StatelessWidget {
                         style: AppTextStyles.textH4grey,
                       ),
                       Text(
-                        "0 Bookings",
+                        "${bookingViewModel.onlineBookings} Bookings",
                         style: AppTextStyles.textH3,
                       ),
                     ],
@@ -87,7 +91,7 @@ class BookingDashboard extends StatelessWidget {
                         style: AppTextStyles.textH4grey,
                       ),
                       Text(
-                        "0 Bookings",
+                        "${bookingViewModel.offlineBookings} Bookings",
                         style: AppTextStyles.textH3,
                       ),
                     ],

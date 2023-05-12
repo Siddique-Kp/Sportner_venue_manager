@@ -19,6 +19,10 @@ class BookingViewModel with ChangeNotifier {
   final List<BookingDataModel> _completedBookings = [];
   int? _errorCode;
   int _totalEarnings = 0;
+  int _onlineEarnings = 0;
+  int _onlineBookings = 0;
+  int _offlineEarnings = 0;
+  int _offlineBookings = 0;
   bool _isLoading = false;
 
   List<BookingDataModel> get bookingDataList => _bookingDataList;
@@ -26,6 +30,10 @@ class BookingViewModel with ChangeNotifier {
   List<BookingDataModel> get pendingbookings => _pendingbookings;
   List<BookingDataModel> get completedBookings => _completedBookings;
   int get totalEarnings => _totalEarnings;
+  int get onlineEarnings => _onlineEarnings;
+  int get onlineBookings => _onlineBookings;
+  int get offlineEarnings => _offlineEarnings;
+  int get offlineBookings => _offlineBookings;
   bool get isLoading => _isLoading;
   int? get errorCode => _errorCode;
 
@@ -42,6 +50,8 @@ class BookingViewModel with ChangeNotifier {
       setLoading(false);
       log("success");
       setBookingDatas(response.response as List<BookingDataModel>);
+      getTotalEarnings();
+      getTotalBookings();
     }
 
     if (response is Failure) {
@@ -56,6 +66,7 @@ class BookingViewModel with ChangeNotifier {
     _allbookingList = bookingDataList;
     setCompletedList();
     setPendingList();
+
     notifyListeners();
   }
 
@@ -117,9 +128,37 @@ class BookingViewModel with ChangeNotifier {
 
   getTotalEarnings() {
     _totalEarnings = 0;
+    _onlineEarnings = 0;
+    _offlineEarnings = 0;
     for (var element in _bookingDataList) {
       if (element.refund != "processed") {
         _totalEarnings += element.price ?? 0;
+        if (element.paymentType != "online" &&
+            element.paymentType != "wallet") {
+          _offlineEarnings += element.price ?? 0;
+        }
+        if (element.paymentType == "online" ||
+            element.paymentType == "wallet") {
+          _onlineEarnings += element.price ?? 0;
+        }
+        notifyListeners();
+      }
+    }
+  }
+
+  getTotalBookings() {
+    _onlineBookings = 0;
+    _offlineBookings = 0;
+    for (var element in _bookingDataList) {
+      if (element.refund != "processed") {
+        if (element.paymentType != "online" &&
+            element.paymentType != "wallet") {
+          _offlineBookings++;
+        }
+        if (element.paymentType == "online" ||
+            element.paymentType == "wallet") {
+          _onlineBookings++;
+        }
         notifyListeners();
       }
     }
