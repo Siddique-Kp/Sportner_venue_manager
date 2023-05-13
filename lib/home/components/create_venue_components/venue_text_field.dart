@@ -72,6 +72,13 @@ class VenueTextField extends StatelessWidget {
       onChanged: (value) {
         context.read<CreateVenueViewModel>().notifyUi();
       },
+      onTapOutside: (event) {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
       validator: (value) {
         if (isMobile) {
           if (value == null || value.isEmpty) {

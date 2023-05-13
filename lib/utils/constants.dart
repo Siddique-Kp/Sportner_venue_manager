@@ -1,5 +1,5 @@
 class Urls {
-  static const String kBASEURL = "http://192.168.224.151:5000";
+  static const String kBASEURL = "http://192.168.0.215:5000";
 
   
   static const String kVENDORSIGNIN = "$kBASEURL/vm/signin";

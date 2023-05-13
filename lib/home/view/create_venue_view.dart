@@ -26,100 +26,112 @@ class CreateVenueView extends StatelessWidget {
     final String title = isEditVenue ? "Edit your" : "Add new";
     log("Rebuilding ---------------------------");
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("$title venue"),
-        centerTitle: true,
-      ),
-      body: createVenueViewModel.errorData?.code == 404
-          ? const NoInternetWidget()
-          : GestureDetector(
-              onTap: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+       return createVenueViewModel.clearAllDatas();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(onPressed: () {
+            Navigator.pop(context);
+            createVenueViewModel.clearAllDatas();
+          }),
+          title: Text("$title venue"),
+          centerTitle: true,
+        ),
+        body: createVenueViewModel.errorData?.code == 404
+            ? const NoInternetWidget()
+            : GestureDetector(
+                onTap: () {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
 
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _firstKey,
-                    child: Column(
-                      children: [
-                        AppSizes.kHeight20,
-                        VenueTextFldWidget(
-                          controller: createVenueViewModel.venueNameCntrllr,
-                          title: "Venue name",
-                          hintText: "Enter Venue name",
-                        ),
-                        VenueTextFldWidget(
-                          controller: createVenueViewModel.venueMobileCntrllr,
-                          title: "Mobile",
-                          hintText: "Enter mobile number",
-                          keyboardType: TextInputType.number,
-                          isMobile: true,
-                        ),
-                        VenueTextFldWidget(
-                          controller: createVenueViewModel.venueAddressCntrllr,
-                          title: "Address",
-                          hintText: "Enter address",
-                        ),
-                        const DistrictPickerField(),
-                        VenueTextFldWidget(
-                          controller:
-                              createVenueViewModel.venueDescriptionCntrllr,
-                          title: "Description",
-                          hintText: "Type something about the venue",
-                          isDescription: true,
-                        ),
-                        AppSizes.kHeight20,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 100,
-                              child: ElevatedButton(
-                                onPressed: createVenueViewModel
-                                        .createVenueFirstValidate()
-                                    ? () async {
-                                        await context
-                                            .read<CreateVenueViewModel>()
-                                            .getAllSports();
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _firstKey,
+                      child: Column(
+                        children: [
+                          AppSizes.kHeight20,
+                          VenueTextFldWidget(
+                            controller: createVenueViewModel.venueNameCntrllr,
+                            title: "Venue name",
+                            hintText: "Enter Venue name",
+                          ),
+                          VenueTextFldWidget(
+                            controller: createVenueViewModel.venueMobileCntrllr,
+                            title: "Mobile",
+                            hintText: "Enter mobile number",
+                            keyboardType: TextInputType.number,
+                            isMobile: true,
+                          ),
+                          VenueTextFldWidget(
+                            controller:
+                                createVenueViewModel.venueAddressCntrllr,
+                            title: "Address",
+                            hintText: "Enter address",
+                          ),
+                          const DistrictPickerField(),
+                          VenueTextFldWidget(
+                            controller:
+                                createVenueViewModel.venueDescriptionCntrllr,
+                            title: "Description",
+                            hintText: "Type something about the venue",
+                            isDescription: true,
+                          ),
+                          AppSizes.kHeight20,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                height: 40,
+                                width: 100,
+                                child: ElevatedButton(
+                                  onPressed: createVenueViewModel
+                                          .createVenueFirstValidate()
+                                      ? () async {
+                                          await context
+                                              .read<CreateVenueViewModel>()
+                                              .getAllSports();
 
-                                        if (_firstKey.currentState!
-                                            .validate()) {
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.push(
-                                            context,
-                                            AppScreens.animatedRoute(
-                                              route: CreateVenueScndView(
-                                                isEditVenue: isEditVenue,
-                                                venueId: venueId,
+                                          if (_firstKey.currentState!
+                                              .validate()) {
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.push(
+                                              context,
+                                              AppScreens.animatedRoute(
+                                                route: CreateVenueScndView(
+                                                  isEditVenue: isEditVenue,
+                                                  venueId: venueId,
+                                                ),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          }
                                         }
-                                      }
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  disabledBackgroundColor: AppColors.lightgrey,
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 0,
+                                    disabledBackgroundColor:
+                                        AppColors.lightgrey,
+                                  ),
+                                  child: const Text("NEXT"),
                                 ),
-                                child: const Text("NEXT"),
                               ),
-                            ),
-                          ],
-                        ),
-                        AppSizes.kHeight20,
-                      ],
+                            ],
+                          ),
+                          AppSizes.kHeight20,
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

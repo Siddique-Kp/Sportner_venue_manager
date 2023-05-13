@@ -15,7 +15,7 @@ class CreateVenueScndView extends StatelessWidget {
   const CreateVenueScndView({
     super.key,
     this.isEditVenue = false,
-    this.venueId ="",
+    this.venueId = "",
   });
   final bool isEditVenue;
   final String venueId;
@@ -32,66 +32,75 @@ class CreateVenueScndView extends StatelessWidget {
       ),
       body: createVenueViewModel.errorData?.code == 404
           ? const NoInternetWidget()
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppSizes.kHeight30,
-                    const DocumentImagePicker(),
-                    AppSizes.kHeight10,
-                    DiscountAndAmountField(
-                      controller: createVenueViewModel.venuePriceCntrllr,
-                      title: "Amount",
-                      hintText: "Per Hour",
-                    ),
-                    AppSizes.kHeight10,
-                    DiscountAndAmountField(
-                      controller: createVenueViewModel.venueDiscountCntrllr,
-                      title: "Dicount %",
-                      hintText: "Percentage%",
-                    ),
-                    AppSizes.kHeight20,
-                    const VenueImageWidget(),
-                    AppSizes.kHeight20,
-                    SelectSportWidget(
-                      allSports: allSports,
-                      createVenueModel: createVenueViewModel,
-                    ),
-                    AppSizes.kHeight30,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 40,
-                          width: 100,
-                          child: ElevatedButton(
-                            onPressed: context
-                                    .watch<CreateVenueViewModel>()
-                                    .createVenueSecondValidate()
-                                ? () {
-                                    Navigator.push(
-                                      context,
-                                      AppScreens.animatedRoute(
-                                        route: CreateVenueThirdView(
-                                          isEditVenue: isEditVenue,
-                                          venueId: venueId,
+          : GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppSizes.kHeight30,
+                      const DocumentImagePicker(),
+                      AppSizes.kHeight10,
+                      DiscountAndAmountField(
+                        controller: createVenueViewModel.venuePriceCntrllr,
+                        title: "Amount",
+                        hintText: "Per Hour",
+                      ),
+                      AppSizes.kHeight10,
+                      DiscountAndAmountField(
+                        controller: createVenueViewModel.venueDiscountCntrllr,
+                        title: "Dicount %",
+                        hintText: "Percentage%",
+                      ),
+                      AppSizes.kHeight20,
+                      const VenueImageWidget(),
+                      AppSizes.kHeight20,
+                      SelectSportWidget(
+                        allSports: allSports,
+                        createVenueModel: createVenueViewModel,
+                      ),
+                      AppSizes.kHeight30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 40,
+                            width: 100,
+                            child: ElevatedButton(
+                              onPressed: context
+                                      .watch<CreateVenueViewModel>()
+                                      .createVenueSecondValidate()
+                                  ? () {
+                                      Navigator.push(
+                                        context,
+                                        AppScreens.animatedRoute(
+                                          route: CreateVenueThirdView(
+                                            isEditVenue: isEditVenue,
+                                            venueId: venueId,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  }
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              disabledBackgroundColor: AppColors.lightgrey,
+                                      );
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                disabledBackgroundColor: AppColors.lightgrey,
+                              ),
+                              child: const Text("Next"),
                             ),
-                            child: const Text("Next"),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -41,15 +41,6 @@ class TimeSlotByDays {
     "23:00-00:00",
   ];
 
-//  static List<Slot> slots = [
-//     {"day": "Sunday", "slots": []},
-//     {"day": "Monday", "slots": []},
-//     {"day": "Tuesday", "slots": []},
-//     {"day": "Wednesday", "slots": []},
-//     {"day": "Thursday", "slots": []},
-//     {"day": "Friday", "slots": []},
-//     {"day": "Saturday", "slots": []},
-//   ];
 
   static timeSlotBottomSheet(BuildContext context, String days, int dayIndex) {
     return showModalBottomSheet(

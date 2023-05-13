@@ -42,7 +42,7 @@ class CreateVenueViewModel with ChangeNotifier {
   File? _venueImage;
   String? _venueImageCloudinary;
   final List<int> _selectedSportIndex = [];
-  List<SportFacility> _selectedFacility = [];
+  final List<SportFacility> _selectedFacility = [];
   FacilityDetail? _facility;
   FacilityDetail? _defaultFacility;
   Failure? _errorData;
@@ -380,6 +380,7 @@ class CreateVenueViewModel with ChangeNotifier {
       venuePriceCntrllr.text = venueData.actualPrice.toString();
       venueDiscountCntrllr.text = venueData.discountPercentage.toString();
       _venueImageCloudinary = venueData.image!;
+
     }
   }
 

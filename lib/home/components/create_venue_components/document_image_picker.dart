@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../utils/global_colors.dart';
 import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';
@@ -56,6 +55,7 @@ class DocumentImagePicker extends StatelessWidget {
                   AppSizes.kWidth10,
                   Expanded(
                     child: Text(
+                      createVenueViewModel.venueDocumentName == "" ||
                       createVenueViewModel.venueDocumentName == null
                           ? "Add Venue Document"
                           : createVenueViewModel.venueDocumentName!
