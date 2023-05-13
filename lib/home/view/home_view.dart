@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sportner_venue_manager/home/components/venues_list_components/shimmer_card.dart';
@@ -82,7 +80,8 @@ class HomeScreenView extends StatelessWidget {
                 Navigator.push(
                   context,
                   AppScreens.animatedRoute(
-                    CreateVenueView(),
+                    route: CreateVenueView(),
+                    fade: false
                   ),
                 );
               },

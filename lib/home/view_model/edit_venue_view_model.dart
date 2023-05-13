@@ -1,28 +1,57 @@
+import 'dart:developer';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
+import 'package:sportner_venue_manager/repo/api_status.dart';
+import '../../repo/api_services.dart';
+import '../../utils/constants.dart';
+import '../../utils/keys.dart';
 import 'create_venue_view_model.dart';
-import 'home_view_model.dart';
 
 class EditVenueViewModel with ChangeNotifier {
-  setEditVenueValues({
-    required CreateVenueViewModel createViewModel,
-    required HomeViewModel venueViewModel,
-    required int index,
-    required bool isEditVenue,
-  }) {
-    if (isEditVenue) {
-      createViewModel.venueNameCntrllr.text =
-          venueViewModel.vmVenueDataList[index].venueName!;
-      createViewModel.venueMobileCntrllr.text =
-          venueViewModel.vmVenueDataList[index].mobile.toString();
-      createViewModel.venueAddressCntrllr.text =
-          venueViewModel.vmVenueDataList[index].place!;
-      createViewModel
-          .getDistrict(venueViewModel.vmVenueDataList[index].district!);
-      createViewModel.venueDescriptionCntrllr.text =
-          venueViewModel.vmVenueDataList[index].description!;
-                   
-      createViewModel.venueDocument?.path.split("/").last =
-          venueViewModel.vmVenueDataList[index].image!;
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  Future<bool> editVenueApiService({
+    required BuildContext context,
+    required String venueId,
+  }) async {
+    bool isSuccess = false;
+    setLoading(true);
+    final editBody = context.read<CreateVenueViewModel>().createVenueBody();
+    final accessToken = await getAccessToken();
+    final response = await ApiServices.dioPutMethod(
+      url: Urls.kUpdateVenue + venueId,
+      body: editBody,
+      headers: accessToken!,
+    );
+
+    if (response is Success) {
+      log("edit venue success");
+      isSuccess = true;
+      await context.read<HomeViewModel>().getVmVenueDatas();
+      setLoading(false);
     }
+
+    if (response is Failure) {
+      isSuccess = false;
+      log("edit venue failed");
+      setLoading(false);
+    }
+    return isSuccess;
+  }
+
+  setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  Future<String?> getAccessToken() async {
+    final sharedPref = await SharedPreferences.getInstance();
+    final accessToken = sharedPref.getString(GlobalKeys.accesToken);
+    return accessToken;
   }
 }

@@ -36,11 +36,16 @@ class AppScreens {
     "/selectMapScreen": (context) => const SelectMapView(),
   };
 
-  static Route animatedRoute(dynamic page) {
+  static Route animatedRoute({
+    required dynamic route,
+    double dx = 0.0,
+    double dy = 1.0,
+    bool fade = true,
+  }) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
+      pageBuilder: (context, animation, secondaryAnimation) => route,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
+        final begin = Offset(dx, dy);
         const end = Offset.zero;
         const curve = Curves.ease;
 
@@ -48,10 +53,23 @@ class AppScreens {
           CurveTween(curve: curve),
         );
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return fade
+            ? FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 1.0, end: 1.0).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeInOut,
+                    ),
+                  ),
+                  child: child,
+                ),
+              )
+            : SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
       },
     );
   }

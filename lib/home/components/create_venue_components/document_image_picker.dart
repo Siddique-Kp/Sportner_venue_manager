@@ -56,9 +56,9 @@ class DocumentImagePicker extends StatelessWidget {
                   AppSizes.kWidth10,
                   Expanded(
                     child: Text(
-                      createVenueViewModel.venueDocument == null
+                      createVenueViewModel.venueDocumentName == null
                           ? "Add Venue Document"
-                          : createVenueViewModel.venueDocument!.path
+                          : createVenueViewModel.venueDocumentName!
                               .split("/")
                               .last,
                               overflow: TextOverflow.ellipsis,

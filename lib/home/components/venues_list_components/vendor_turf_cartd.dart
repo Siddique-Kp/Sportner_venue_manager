@@ -86,7 +86,7 @@ class VendorTurfCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => CreateVenueView(
                 isEditVenue: true,
-                index: index,
+                venueId: vmVenueDataList[index].id!,
               ),
             ),
           );

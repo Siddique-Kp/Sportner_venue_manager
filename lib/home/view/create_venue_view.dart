@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/view/create_venue_scnd_view.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
@@ -13,10 +14,10 @@ class CreateVenueView extends StatelessWidget {
   CreateVenueView({
     super.key,
     this.isEditVenue = false,
-    this.index = -1,
+    this.venueId = "",
   });
   final bool isEditVenue;
-  final int index;
+  final String venueId;
   final _firstKey = GlobalKey<FormState>();
 
   @override
@@ -24,7 +25,6 @@ class CreateVenueView extends StatelessWidget {
     final createVenueViewModel = context.watch<CreateVenueViewModel>();
     final String title = isEditVenue ? "Edit your" : "Add new";
     log("Rebuilding ---------------------------");
-  
 
     return Scaffold(
       appBar: AppBar(
@@ -92,8 +92,15 @@ class CreateVenueView extends StatelessWidget {
                                         if (_firstKey.currentState!
                                             .validate()) {
                                           // ignore: use_build_context_synchronously
-                                          Navigator.pushNamed(context,
-                                              AppScreens.createVenueScndScreen);
+                                          Navigator.push(
+                                            context,
+                                            AppScreens.animatedRoute(
+                                              route: CreateVenueScndView(
+                                                isEditVenue: isEditVenue,
+                                                venueId: venueId,
+                                              ),
+                                            ),
+                                          );
                                         }
                                       }
                                     : null,

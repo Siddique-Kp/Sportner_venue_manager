@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/view_model/create_venue_view_model.dart';
+import 'package:sportner_venue_manager/home/view_model/edit_venue_view_model.dart';
 import 'package:sportner_venue_manager/utils/global_colors.dart';
 import 'package:sportner_venue_manager/utils/global_values.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import 'package:sportner_venue_manager/utils/textstyles.dart';
+import 'package:sportner_venue_manager/vendor_registration/components/snackbar.dart';
 import '../components/create_venue_components/google_map_widget.dart';
 import '../components/create_venue_components/select_time_slot_components.dart';
 import '../components/error_data_widget.dart';
 
 class CreateVenueThirdView extends StatelessWidget {
-  const CreateVenueThirdView({super.key});
+  const CreateVenueThirdView({
+    super.key,
+    this.isEditVenue = false,
+    this.venueId = "",
+  });
+
+  final bool isEditVenue;
+  final String venueId;
 
   @override
   Widget build(BuildContext context) {
     final createVenueViewModel = context.watch<CreateVenueViewModel>();
+    final title = isEditVenue ? "Edit your" : "Add new";
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add new venue"),
+        title: Text("$title venue"),
         centerTitle: true,
       ),
       body: createVenueViewModel.errorData?.code == 404
@@ -36,23 +48,24 @@ class CreateVenueThirdView extends StatelessWidget {
                       _selecTimeSlot(),
                     ],
                   ),
-                  _submitbutton(context),
+                  _submitbutton(context, venueId),
                 ],
               ),
             ),
     );
   }
 
-  Widget _submitbutton(BuildContext context) {
+  Widget _submitbutton(BuildContext context, String venueId) {
     final createVenueViewModel = context.watch<CreateVenueViewModel>();
+    final editVenueViewModel = context.watch<EditVenueViewModel>();
     return Padding(
       padding: const EdgeInsets.only(bottom: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(
-            height: 40,
-            width: 100,
+            height: 40.h,
+            width: 100.w,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 0,
@@ -60,17 +73,38 @@ class CreateVenueThirdView extends StatelessWidget {
               ),
               onPressed: createVenueViewModel.createVenueThirdValidate()
                   ? () {
-                      context
-                          .read<CreateVenueViewModel>()
-                          .createVenueApiService(context);
+                      if (isEditVenue) {
+                        context
+                            .read<EditVenueViewModel>()
+                            .editVenueApiService(
+                                context: context, venueId: venueId)
+                            .then((value) {
+                          if (value == true) {
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                AppScreens.mainScreen, (route) => false);
+                            GlassSnackBar.snackBar(
+                                context: context,
+                                title: "Venue updated",
+                                subtitle: "Venue updated successfully");
+                          } else {
+                            SnackBarWidget.snackBar(
+                                context, "Could not update venue");
+                          }
+                        });
+                      } else {
+                        context
+                            .read<CreateVenueViewModel>()
+                            .createVenueApiService(context);
+                      }
                     }
                   : null,
-              child: createVenueViewModel.isLoading
-                  ? const CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.white,
-                    )
-                  : const Text("SUBMIT"),
+              child:
+                  createVenueViewModel.isLoading || editVenueViewModel.isLoading
+                      ? const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.white,
+                        )
+                      : Text(isEditVenue ? "UPDATE" : "SUBMIT"),
             ),
           )
         ],
@@ -138,7 +172,10 @@ class CreateVenueThirdView extends StatelessWidget {
       children: [
         TextButton(
           style: const ButtonStyle(
-              padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
+            padding: MaterialStatePropertyAll(
+              EdgeInsets.all(0),
+            ),
+          ),
           onPressed: () {
             Navigator.pushNamed(
               context,

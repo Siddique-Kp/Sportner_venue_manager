@@ -37,11 +37,12 @@ class CreateVenueViewModel with ChangeNotifier {
   bool _isLoadingSport = false;
   bool _isLoading = false;
   File? _venueDocument;
+  String? _venueDocumentName;
   String? venueDocClodinary;
   File? _venueImage;
   String? _venueImageCloudinary;
   final List<int> _selectedSportIndex = [];
-  final List<SportFacility> _selectedFacility = [];
+  List<SportFacility> _selectedFacility = [];
   FacilityDetail? _facility;
   FacilityDetail? _defaultFacility;
   Failure? _errorData;
@@ -51,6 +52,7 @@ class CreateVenueViewModel with ChangeNotifier {
   bool get isLoadingSport => _isLoadingSport;
   bool get isLoading => _isLoading;
   File? get venueDocument => _venueDocument;
+  String? get venueDocumentName => _venueDocumentName;
   File? get venueImage => _venueImage;
   String? get venueImageCloudinary => _venueImageCloudinary;
   List<int> get selectedSportIndex => _selectedSportIndex;
@@ -153,7 +155,9 @@ class CreateVenueViewModel with ChangeNotifier {
 
   documentPicker(context) async {
     _venueDocument = await imagePicker(context);
+
     if (_venueDocument != null) {
+      _venueDocumentName = _venueDocument!.path;
       venueDocClodinary = await cloudinaryImage(_venueDocument!);
     }
   }
@@ -258,7 +262,7 @@ class CreateVenueViewModel with ChangeNotifier {
 
   /// PASSING ALL THE DATA TO THE SERVER
 
-  createVenueBody() {
+  Map<String, dynamic> createVenueBody() {
     final createVenueBody = CreateVenueModel(
       venueName: venueNameCntrllr.text.trim(),
       mobile: venueMobileCntrllr.text.trim(),
@@ -332,10 +336,10 @@ class CreateVenueViewModel with ChangeNotifier {
   }
 
   bool createVenueSecondValidate() {
-    if (venueDocument == null ||
+    if (_venueDocumentName == null ||
         venuePriceCntrllr.text.isEmpty ||
         venueDiscountCntrllr.text.isEmpty ||
-        venueImage == null ||
+        venueImageCloudinary == null ||
         selectedFacility.isEmpty) {
       return false;
     } else {
@@ -365,17 +369,16 @@ class CreateVenueViewModel with ChangeNotifier {
     required VmVenueDataModel venueData,
     required bool isEditVenue,
   }) {
-    log("hiiiiiii");
     if (isEditVenue) {
       venueNameCntrllr.text = venueData.venueName!;
       venueMobileCntrllr.text = venueData.mobile.toString();
       venueAddressCntrllr.text = venueData.place!;
       getDistrict(venueData.district!);
       venueDescriptionCntrllr.text = venueData.description!;
-
+      _venueDocumentName = venueData.document?.split("/").last;
+      venueDocClodinary = venueData.document;
       venuePriceCntrllr.text = venueData.actualPrice.toString();
       venueDiscountCntrllr.text = venueData.discountPercentage.toString();
-
       _venueImageCloudinary = venueData.image!;
     }
   }
@@ -387,6 +390,7 @@ class CreateVenueViewModel with ChangeNotifier {
     _districtName = 'Select District';
     venueDescriptionCntrllr.clear();
     _venueDocument = null;
+    _venueDocumentName = "";
     _venueImage = null;
     _venueImageCloudinary = "";
     venueDocClodinary = "";
