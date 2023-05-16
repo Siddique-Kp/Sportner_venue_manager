@@ -19,13 +19,13 @@ class ApiServices {
       final response = await dio.post(url, data: body);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        log("Success");
+        log(response.data.toString());
         return Success(
           response: jsonEncode == null ? null : jsonEncode(response.data),
           code: response.statusCode,
         );
       }
-      // log(response.data.toString());
+      log(response.data.toString());
       log(response.statusCode.toString());
       return Failure(
         code: response.statusCode,

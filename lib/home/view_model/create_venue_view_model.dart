@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/components/glass_snack_bar.dart';
 import 'package:sportner_venue_manager/home/model/create_venue_model.dart';
 import 'package:sportner_venue_manager/home/model/sports_data_model.dart';
@@ -14,7 +13,6 @@ import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
-import 'package:sportner_venue_manager/utils/keys.dart';
 import 'package:sportner_venue_manager/utils/routes/navigations.dart';
 import '../../vendor_registration/components/snackbar.dart';
 
@@ -71,7 +69,7 @@ class CreateVenueViewModel with ChangeNotifier {
   getAllSports() async {
     _setLoading(true);
 
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
 
     final response = await ApiServices.dioGetMethod(
         url: Urls.kGetAllSports,
@@ -102,11 +100,7 @@ class CreateVenueViewModel with ChangeNotifier {
     _isLoadingSport = loading;
   }
 
-  Future<String?> getAccessToken() async {
-    final sharedPref = await SharedPreferences.getInstance();
-    final accessToken = sharedPref.getString(GlobalKeys.accesToken);
-    return accessToken;
-  }
+
 
   setSelectSport(
       int index, SportsDataModel? allSports, FacilityDetail defaultFacility) {
@@ -285,7 +279,7 @@ class CreateVenueViewModel with ChangeNotifier {
 
   createVenueApiService(BuildContext context) async {
     setLoading(true);
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
     final response = await ApiServices.dioPostMethod(
       url: Urls.kCreateVenue,
       body: createVenueBody(),

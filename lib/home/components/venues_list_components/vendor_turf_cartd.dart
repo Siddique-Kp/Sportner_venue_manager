@@ -10,6 +10,7 @@ import '../../../utils/global_values.dart';
 import '../../../utils/textstyles.dart';
 import '../../view/create_venue_view.dart';
 import '../../view/venue_details_view.dart';
+import '../../view_model/venue_details_view_model.dart';
 import 'sports_icon.dart';
 
 class VendorTurfCard extends StatelessWidget {
@@ -29,7 +30,9 @@ class VendorTurfCard extends StatelessWidget {
       separatorBuilder: (context, index) => AppSizes.kHeight20,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () {
+          onTap: ()async {
+           await context.read<VenueDetailsViewModel>().getSingleVenue(vmVenueDataList[index].id!);
+            // ignore: use_build_context_synchronously
             Navigator.push(
               context,
               MaterialPageRoute(

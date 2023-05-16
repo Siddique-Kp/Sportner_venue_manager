@@ -1,12 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/view_model/home_view_model.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 import '../../repo/api_services.dart';
 import '../../utils/constants.dart';
-import '../../utils/keys.dart';
 import 'create_venue_view_model.dart';
 
 class EditVenueViewModel with ChangeNotifier {
@@ -21,7 +19,7 @@ class EditVenueViewModel with ChangeNotifier {
     bool isSuccess = false;
     setLoading(true);
     final editBody = context.read<CreateVenueViewModel>().createVenueBody();
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
     final response = await ApiServices.dioPutMethod(
       url: Urls.kUpdateVenue + venueId,
       body: editBody,
@@ -46,11 +44,5 @@ class EditVenueViewModel with ChangeNotifier {
   setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
-  }
-
-  Future<String?> getAccessToken() async {
-    final sharedPref = await SharedPreferences.getInstance();
-    final accessToken = sharedPref.getString(GlobalKeys.accesToken);
-    return accessToken;
   }
 }

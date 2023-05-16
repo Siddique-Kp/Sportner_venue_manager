@@ -1,9 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/model/vm_venue_data_model.dart';
 import 'package:sportner_venue_manager/utils/constants.dart';
-import 'package:sportner_venue_manager/utils/keys.dart';
 import 'package:sportner_venue_manager/repo/api_services.dart';
 import 'package:sportner_venue_manager/repo/api_status.dart';
 
@@ -24,7 +22,7 @@ class HomeViewModel with ChangeNotifier {
     setLoading(true);
     await Future.delayed(const Duration(seconds: 2));
 
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
 
     final response = await ApiServices.dioGetMethod(
       url: Urls.kGetAllVenues,
@@ -46,7 +44,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   getBlockVenue(String venueId) async {
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
 
     final response = await ApiServices.dioPutMethod(
       url: Urls.kBlockVenue,
@@ -90,11 +88,5 @@ class HomeViewModel with ChangeNotifier {
   setErrorResponse(Failure error) {
     _errorCode = error.code;
     notifyListeners();
-  }
-
-  Future<String?> getAccessToken() async {
-    final sharedpref = await SharedPreferences.getInstance();
-    final accessToken = sharedpref.getString(GlobalKeys.accesToken);
-    return accessToken;
   }
 }

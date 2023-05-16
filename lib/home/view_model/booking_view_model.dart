@@ -1,10 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sportner_venue_manager/home/model/booking_data_model.dart';
 import '../../utils/constants.dart';
-import '../../utils/keys.dart';
 import '../../repo/api_services.dart';
 import '../../repo/api_status.dart';
 
@@ -39,7 +37,7 @@ class BookingViewModel with ChangeNotifier {
 
   getBookingDatas() async {
     setLoading(true);
-    final accessToken = await getAccessToken();
+    final accessToken = await AccessToken.getAccessToken();
     final response = await ApiServices.dioGetMethod(
       url: Urls.kGetAllbooking,
       jsonDecod: bookingDataModelFromJson,
@@ -184,9 +182,4 @@ class BookingViewModel with ChangeNotifier {
     }
   }
 
-  Future<String?> getAccessToken() async {
-    final sharedpref = await SharedPreferences.getInstance();
-    final accessToken = sharedpref.getString(GlobalKeys.accesToken);
-    return accessToken;
-  }
 }

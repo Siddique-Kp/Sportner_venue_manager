@@ -22,15 +22,13 @@ class ServiceExeptions {
         errorResponse: "Invalid Format",
       );
     } else if (e is SocketException) {
-      log("SocketException");
-      // log(e.message);
       return Failure(
         code: InvalidRespons.kNOINTERNET,
         errorResponse: "No internet connection",
       );
     } else if (e is DioError) {
-      log("SocketException");
-      // log(e.message);
+      log(e.toString());
+      log("SocketException Dio");
       return Failure(
         code: InvalidRespons.kNOINTERNET,
         errorResponse: "No internet connection",
